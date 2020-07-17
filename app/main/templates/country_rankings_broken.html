@@ -1,0 +1,85 @@
+
+<!-- DataTable -->
+<link href="https://cdn.datatables.net/1.10.16/css/jquery.dataTables.min.css" rel="stylesheet">
+
+<!-- Plotly -->
+<script src="https://cdn.plot.ly/plotly-latest.min.js"></script>
+
+<!-- JS, Popper.js, and jQuery -->
+<script src="https://code.jquery.com/jquery-3.5.1.slim.min.js" integrity="sha384-DfXdz2htPH0lsSSs5nCTpuj/zy4C+OGpamoFVy38MVBnE+IbbVYUew+OrCXaRkfj" crossorigin="anonymous"></script>
+<script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.0/dist/umd/popper.min.js" integrity="sha384-Q6E9RHvbIyZFJoft+2mJbHaEWldlvI9IOYy5n3zV9zzTtmI3UksdQRVvoxMfooAo" crossorigin="anonymous"></script>
+<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.0/js/bootstrap.min.js" integrity="sha384-OgVRvuATP1z7JjHLkuOU7Xw704+h835Lr+6QL9UvYjZE3Ipu6Tp75j7Bh/kR0JKI" crossorigin="anonymous"></script>
+
+{% extends "base.html" %}
+
+{% block app_content %}
+
+<body>
+
+<h1>This is the country rankings</h1>
+
+<!-- Emission Selector -->
+<div class="form-group">
+    <!-- <label for="map-emisison-select">Emission Source to Plot</label> -->
+    <select id="map-emission-select" class="form-control">
+        <option value="co2">Carbon Dioxide (CO2)</option>
+        <option value="nox">Nitrogen Oxides (NOx)</option>
+        <option value="so2">Sulfur Dioxide (SO2)</option>
+    </select>
+</div>
+
+<!-- Map -->
+<div class="row row-no-gutters">
+    <div class="col-lg-12">
+        <div class="chart" id="country-map">
+            <script>
+                var graphs = {{plot | safe}};
+                Plotly.react('country-map', graphs, {});
+            </script>
+        </div>
+    </div>
+</div>
+
+<!-- Table -->
+<!-- <div>
+    {{table | safe}}
+</div> -->
+
+{% endblock %}
+
+<!-- Map jQuery -->
+<script>
+$('#map-emission-select').on('change', function(){
+    $.ajax({
+        url: {{ url_for('main.map_update')|tojson|safe }},
+        type: "GET",
+        contentType: 'application/json;charset=UTF-8',
+        data: {
+            'selected': document.getElementById('map-emission-select').value
+        },
+        dataType: "json",
+        success: function (data) {
+            Plotly.react('country-map', data );
+        }
+    });
+})
+</script>
+
+<!-- DataTable -->
+<script type="text/javascript" charset="utf8" src="https://cdn.datatables.net/1.10.21/js/jquery.dataTables.js"></script>
+
+<!-- DataTable jQuery -->
+<!-- <script type="text/javascript">
+    $(document).ready(function(){
+        $('#emission-table').DataTable({
+            "pageLength": 50}
+        );
+    });
+</script> -->
+<script type="text/javascript">
+    $(document).ready(function() {
+      $('#emission-table').DataTable();
+    });
+</script>
+
+</body>

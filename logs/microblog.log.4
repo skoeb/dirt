@@ -1,0 +1,103 @@
+2020-07-03 23:20:32,632 INFO: Microblog startup [in /home/sam/tycho_flask/tycho/app/__init__.py:34]
+2020-07-03 23:38:21,417 INFO: Microblog startup [in /home/sam/tycho_flask/tycho/app/__init__.py:34]
+2020-07-03 23:39:13,157 INFO: Microblog startup [in /home/sam/tycho_flask/tycho/app/__init__.py:34]
+2020-07-03 23:39:15,608 ERROR: Exception on / [GET] [in /home/sam/anaconda3/envs/tycho/lib/python3.8/site-packages/flask/app.py:1891]
+Traceback (most recent call last):
+  File "/home/sam/anaconda3/envs/tycho/lib/python3.8/site-packages/flask/app.py", line 2447, in wsgi_app
+    response = self.full_dispatch_request()
+  File "/home/sam/anaconda3/envs/tycho/lib/python3.8/site-packages/flask/app.py", line 1952, in full_dispatch_request
+    rv = self.handle_user_exception(e)
+  File "/home/sam/anaconda3/envs/tycho/lib/python3.8/site-packages/flask/app.py", line 1821, in handle_user_exception
+    reraise(exc_type, exc_value, tb)
+  File "/home/sam/anaconda3/envs/tycho/lib/python3.8/site-packages/flask/_compat.py", line 39, in reraise
+    raise value
+  File "/home/sam/anaconda3/envs/tycho/lib/python3.8/site-packages/flask/app.py", line 1950, in full_dispatch_request
+    rv = self.dispatch_request()
+  File "/home/sam/anaconda3/envs/tycho/lib/python3.8/site-packages/flask/app.py", line 1936, in dispatch_request
+    return self.view_functions[rule.endpoint](**req.view_args)
+  File "/home/sam/tycho_flask/tycho/app/main/routes.py", line 8, in index
+    return render_template('index.html')
+  File "/home/sam/anaconda3/envs/tycho/lib/python3.8/site-packages/flask/templating.py", line 138, in render_template
+    ctx.app.jinja_env.get_or_select_template(template_name_or_list),
+  File "/home/sam/anaconda3/envs/tycho/lib/python3.8/site-packages/jinja2/environment.py", line 930, in get_or_select_template
+    return self.get_template(template_name_or_list, parent, globals)
+  File "/home/sam/anaconda3/envs/tycho/lib/python3.8/site-packages/jinja2/environment.py", line 883, in get_template
+    return self._load_template(name, self.make_globals(globals))
+  File "/home/sam/anaconda3/envs/tycho/lib/python3.8/site-packages/jinja2/environment.py", line 857, in _load_template
+    template = self.loader.load(self, name, globals)
+  File "/home/sam/anaconda3/envs/tycho/lib/python3.8/site-packages/jinja2/loaders.py", line 115, in load
+    source, filename, uptodate = self.get_source(environment, name)
+  File "/home/sam/anaconda3/envs/tycho/lib/python3.8/site-packages/flask/templating.py", line 60, in get_source
+    return self._get_source_fast(environment, template)
+  File "/home/sam/anaconda3/envs/tycho/lib/python3.8/site-packages/flask/templating.py", line 89, in _get_source_fast
+    raise TemplateNotFound(template)
+jinja2.exceptions.TemplateNotFound: index.html
+2020-07-03 23:41:20,962 INFO: Microblog startup [in /home/sam/tycho_flask/tycho/app/__init__.py:34]
+2020-07-03 23:41:23,901 ERROR: Exception on / [GET] [in /home/sam/anaconda3/envs/tycho/lib/python3.8/site-packages/flask/app.py:1891]
+Traceback (most recent call last):
+  File "/home/sam/anaconda3/envs/tycho/lib/python3.8/site-packages/flask/app.py", line 2447, in wsgi_app
+    response = self.full_dispatch_request()
+  File "/home/sam/anaconda3/envs/tycho/lib/python3.8/site-packages/flask/app.py", line 1952, in full_dispatch_request
+    rv = self.handle_user_exception(e)
+  File "/home/sam/anaconda3/envs/tycho/lib/python3.8/site-packages/flask/app.py", line 1821, in handle_user_exception
+    reraise(exc_type, exc_value, tb)
+  File "/home/sam/anaconda3/envs/tycho/lib/python3.8/site-packages/flask/_compat.py", line 39, in reraise
+    raise value
+  File "/home/sam/anaconda3/envs/tycho/lib/python3.8/site-packages/flask/app.py", line 1950, in full_dispatch_request
+    rv = self.dispatch_request()
+  File "/home/sam/anaconda3/envs/tycho/lib/python3.8/site-packages/flask/app.py", line 1936, in dispatch_request
+    return self.view_functions[rule.endpoint](**req.view_args)
+  File "/home/sam/tycho_flask/tycho/app/main/routes.py", line 8, in index
+    return render_template('base.html')
+  File "/home/sam/anaconda3/envs/tycho/lib/python3.8/site-packages/flask/templating.py", line 137, in render_template
+    return _render(
+  File "/home/sam/anaconda3/envs/tycho/lib/python3.8/site-packages/flask/templating.py", line 120, in _render
+    rv = template.render(context)
+  File "/home/sam/anaconda3/envs/tycho/lib/python3.8/site-packages/jinja2/environment.py", line 1090, in render
+    self.environment.handle_exception()
+  File "/home/sam/anaconda3/envs/tycho/lib/python3.8/site-packages/jinja2/environment.py", line 832, in handle_exception
+    reraise(*rewrite_traceback_stack(source=source))
+  File "/home/sam/anaconda3/envs/tycho/lib/python3.8/site-packages/jinja2/_compat.py", line 28, in reraise
+    raise value.with_traceback(tb)
+  File "/home/sam/tycho_flask/tycho/app/templates/base.html", line 1, in top-level template code
+    {% extends 'bootstrap/base.html' %}
+  File "/home/sam/anaconda3/envs/tycho/lib/python3.8/site-packages/flask/templating.py", line 60, in get_source
+    return self._get_source_fast(environment, template)
+  File "/home/sam/anaconda3/envs/tycho/lib/python3.8/site-packages/flask/templating.py", line 89, in _get_source_fast
+    raise TemplateNotFound(template)
+jinja2.exceptions.TemplateNotFound: bootstrap/base.html
+2020-07-03 23:42:35,518 INFO: Microblog startup [in /home/sam/tycho_flask/tycho/app/__init__.py:35]
+2020-07-03 23:42:37,660 ERROR: Exception on / [GET] [in /home/sam/anaconda3/envs/tycho/lib/python3.8/site-packages/flask/app.py:1891]
+Traceback (most recent call last):
+  File "/home/sam/anaconda3/envs/tycho/lib/python3.8/site-packages/flask/app.py", line 2447, in wsgi_app
+    response = self.full_dispatch_request()
+  File "/home/sam/anaconda3/envs/tycho/lib/python3.8/site-packages/flask/app.py", line 1952, in full_dispatch_request
+    rv = self.handle_user_exception(e)
+  File "/home/sam/anaconda3/envs/tycho/lib/python3.8/site-packages/flask/app.py", line 1821, in handle_user_exception
+    reraise(exc_type, exc_value, tb)
+  File "/home/sam/anaconda3/envs/tycho/lib/python3.8/site-packages/flask/_compat.py", line 39, in reraise
+    raise value
+  File "/home/sam/anaconda3/envs/tycho/lib/python3.8/site-packages/flask/app.py", line 1950, in full_dispatch_request
+    rv = self.dispatch_request()
+  File "/home/sam/anaconda3/envs/tycho/lib/python3.8/site-packages/flask/app.py", line 1936, in dispatch_request
+    return self.view_functions[rule.endpoint](**req.view_args)
+  File "/home/sam/tycho_flask/tycho/app/main/routes.py", line 8, in index
+    return render_template('base.html')
+  File "/home/sam/anaconda3/envs/tycho/lib/python3.8/site-packages/flask/templating.py", line 137, in render_template
+    return _render(
+  File "/home/sam/anaconda3/envs/tycho/lib/python3.8/site-packages/flask/templating.py", line 120, in _render
+    rv = template.render(context)
+  File "/home/sam/anaconda3/envs/tycho/lib/python3.8/site-packages/jinja2/environment.py", line 1090, in render
+    self.environment.handle_exception()
+  File "/home/sam/anaconda3/envs/tycho/lib/python3.8/site-packages/jinja2/environment.py", line 832, in handle_exception
+    reraise(*rewrite_traceback_stack(source=source))
+  File "/home/sam/anaconda3/envs/tycho/lib/python3.8/site-packages/jinja2/_compat.py", line 28, in reraise
+    raise value.with_traceback(tb)
+  File "/home/sam/tycho_flask/tycho/app/templates/base.html", line 1, in top-level template code
+    {% extends 'bootstrap/base.html' %}
+  File "/home/sam/anaconda3/envs/tycho/lib/python3.8/site-packages/flask/templating.py", line 60, in get_source
+    return self._get_source_fast(environment, template)
+  File "/home/sam/anaconda3/envs/tycho/lib/python3.8/site-packages/flask/templating.py", line 89, in _get_source_fast
+    raise TemplateNotFound(template)
+jinja2.exceptions.TemplateNotFound: bootstrap/base.html
+2020-07-03 23:52:49,546 INFO: Microblog startup [in /home/sam/tycho_flask/tycho/app/__init__.py:35]

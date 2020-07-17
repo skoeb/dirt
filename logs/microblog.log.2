@@ -1,0 +1,124 @@
+2020-07-04 14:04:45,149 ERROR: Exception on / [GET] [in /Users/skoeb/miniconda3/envs/tycho/lib/python3.8/site-packages/flask/app.py:1891]
+Traceback (most recent call last):
+  File "/Users/skoeb/miniconda3/envs/tycho/lib/python3.8/site-packages/flask/app.py", line 2447, in wsgi_app
+    response = self.full_dispatch_request()
+  File "/Users/skoeb/miniconda3/envs/tycho/lib/python3.8/site-packages/flask/app.py", line 1952, in full_dispatch_request
+    rv = self.handle_user_exception(e)
+  File "/Users/skoeb/miniconda3/envs/tycho/lib/python3.8/site-packages/flask/app.py", line 1821, in handle_user_exception
+    reraise(exc_type, exc_value, tb)
+  File "/Users/skoeb/miniconda3/envs/tycho/lib/python3.8/site-packages/flask/_compat.py", line 39, in reraise
+    raise value
+  File "/Users/skoeb/miniconda3/envs/tycho/lib/python3.8/site-packages/flask/app.py", line 1950, in full_dispatch_request
+    rv = self.dispatch_request()
+  File "/Users/skoeb/miniconda3/envs/tycho/lib/python3.8/site-packages/flask/app.py", line 1936, in dispatch_request
+    return self.view_functions[rule.endpoint](**req.view_args)
+  File "/Users/skoeb/Desktop/tycho_flask/tycho/app/main/routes.py", line 8, in index
+    return render_template('base.html')
+  File "/Users/skoeb/miniconda3/envs/tycho/lib/python3.8/site-packages/flask/templating.py", line 138, in render_template
+    ctx.app.jinja_env.get_or_select_template(template_name_or_list),
+  File "/Users/skoeb/miniconda3/envs/tycho/lib/python3.8/site-packages/jinja2/environment.py", line 930, in get_or_select_template
+    return self.get_template(template_name_or_list, parent, globals)
+  File "/Users/skoeb/miniconda3/envs/tycho/lib/python3.8/site-packages/jinja2/environment.py", line 883, in get_template
+    return self._load_template(name, self.make_globals(globals))
+  File "/Users/skoeb/miniconda3/envs/tycho/lib/python3.8/site-packages/jinja2/environment.py", line 857, in _load_template
+    template = self.loader.load(self, name, globals)
+  File "/Users/skoeb/miniconda3/envs/tycho/lib/python3.8/site-packages/jinja2/loaders.py", line 127, in load
+    code = environment.compile(source, name, filename)
+  File "/Users/skoeb/miniconda3/envs/tycho/lib/python3.8/site-packages/jinja2/environment.py", line 638, in compile
+    self.handle_exception(source=source_hint)
+  File "/Users/skoeb/miniconda3/envs/tycho/lib/python3.8/site-packages/jinja2/environment.py", line 832, in handle_exception
+    reraise(*rewrite_traceback_stack(source=source))
+  File "/Users/skoeb/miniconda3/envs/tycho/lib/python3.8/site-packages/jinja2/_compat.py", line 28, in reraise
+    raise value.with_traceback(tb)
+  File "/Users/skoeb/Desktop/tycho_flask/tycho/app/templates/base.html", line 17, in template
+    <li><a href="{{ url_for('main.country_rankings) }}">{{('Country Rankings') }}</a></li>
+jinja2.exceptions.TemplateSyntaxError: expected token ',', got 'Country'
+2020-07-13 23:10:52,711 INFO: Microblog startup [in /home/sam/tycho_flask/tycho/app/__init__.py:38]
+2020-07-13 23:11:13,628 INFO: Microblog startup [in /home/sam/tycho_flask/tycho/app/__init__.py:38]
+2020-07-13 23:15:01,427 INFO: Microblog startup [in /home/sam/tycho_flask/tycho/app/__init__.py:38]
+2020-07-13 23:27:39,446 INFO: Microblog startup [in /home/sam/tycho_flask/tycho/app/__init__.py:38]
+2020-07-13 23:57:34,411 INFO: Microblog startup [in /home/sam/tycho_flask/tycho/app/__init__.py:42]
+2020-07-13 23:57:36,684 ERROR: Exception on /country_rankings [GET] [in /home/sam/anaconda3/envs/tycho/lib/python3.8/site-packages/flask/app.py:1891]
+Traceback (most recent call last):
+  File "/home/sam/anaconda3/envs/tycho/lib/python3.8/site-packages/flask/app.py", line 2447, in wsgi_app
+    response = self.full_dispatch_request()
+  File "/home/sam/anaconda3/envs/tycho/lib/python3.8/site-packages/flask/app.py", line 1952, in full_dispatch_request
+    rv = self.handle_user_exception(e)
+  File "/home/sam/anaconda3/envs/tycho/lib/python3.8/site-packages/flask/app.py", line 1821, in handle_user_exception
+    reraise(exc_type, exc_value, tb)
+  File "/home/sam/anaconda3/envs/tycho/lib/python3.8/site-packages/flask/_compat.py", line 39, in reraise
+    raise value
+  File "/home/sam/anaconda3/envs/tycho/lib/python3.8/site-packages/flask/app.py", line 1950, in full_dispatch_request
+    rv = self.dispatch_request()
+  File "/home/sam/anaconda3/envs/tycho/lib/python3.8/site-packages/flask/app.py", line 1936, in dispatch_request
+    return self.view_functions[rule.endpoint](**req.view_args)
+  File "/home/sam/tycho_flask/tycho/app/main/routes.py", line 16, in country_rankings
+    bar = plots.create_plot()
+AttributeError: module 'app.main.plots' has no attribute 'create_plot'
+2020-07-13 23:58:10,578 INFO: Microblog startup [in /home/sam/tycho_flask/tycho/app/__init__.py:42]
+2020-07-13 23:58:13,490 ERROR: Exception on /country_rankings [GET] [in /home/sam/anaconda3/envs/tycho/lib/python3.8/site-packages/flask/app.py:1891]
+Traceback (most recent call last):
+  File "/home/sam/anaconda3/envs/tycho/lib/python3.8/site-packages/flask/app.py", line 2447, in wsgi_app
+    response = self.full_dispatch_request()
+  File "/home/sam/anaconda3/envs/tycho/lib/python3.8/site-packages/flask/app.py", line 1952, in full_dispatch_request
+    rv = self.handle_user_exception(e)
+  File "/home/sam/anaconda3/envs/tycho/lib/python3.8/site-packages/flask/app.py", line 1821, in handle_user_exception
+    reraise(exc_type, exc_value, tb)
+  File "/home/sam/anaconda3/envs/tycho/lib/python3.8/site-packages/flask/_compat.py", line 39, in reraise
+    raise value
+  File "/home/sam/anaconda3/envs/tycho/lib/python3.8/site-packages/flask/app.py", line 1950, in full_dispatch_request
+    rv = self.dispatch_request()
+  File "/home/sam/anaconda3/envs/tycho/lib/python3.8/site-packages/flask/app.py", line 1936, in dispatch_request
+    return self.view_functions[rule.endpoint](**req.view_args)
+  File "/home/sam/tycho_flask/tycho/app/main/routes.py", line 16, in country_rankings
+    bar = plots.create_map(form.emission)
+  File "/home/sam/tycho_flask/tycho/app/main/plots.py", line 14, in create_map
+    query = db.query(Plant.plant_id_wri,
+AttributeError: 'SQLAlchemy' object has no attribute 'query'
+2020-07-14 00:00:51,438 INFO: Microblog startup [in /home/sam/tycho_flask/tycho/app/__init__.py:42]
+2020-07-14 00:04:58,834 INFO: Microblog startup [in /home/sam/tycho_flask/tycho/app/__init__.py:42]
+2020-07-14 00:06:35,875 ERROR: Exception on /country_rankings [GET] [in /home/sam/anaconda3/envs/tycho/lib/python3.8/site-packages/flask/app.py:1891]
+Traceback (most recent call last):
+  File "/home/sam/anaconda3/envs/tycho/lib/python3.8/site-packages/flask/app.py", line 2447, in wsgi_app
+    response = self.full_dispatch_request()
+  File "/home/sam/anaconda3/envs/tycho/lib/python3.8/site-packages/flask/app.py", line 1950, in full_dispatch_request
+    rv = self.dispatch_request()
+  File "/home/sam/anaconda3/envs/tycho/lib/python3.8/site-packages/flask/app.py", line 1821, in handle_user_exception
+    reraise(exc_type, exc_value, tb)
+  File "/home/sam/anaconda3/envs/tycho/lib/python3.8/site-packages/flask/_compat.py", line 39, in reraise
+    raise value
+  File "/home/sam/anaconda3/envs/tycho/lib/python3.8/site-packages/flask/app.py", line 1950, in full_dispatch_request
+    rv = self.dispatch_request()
+  File "/home/sam/anaconda3/envs/tycho/lib/python3.8/site-packages/flask/app.py", line 1936, in dispatch_request
+    return self.view_functions[rule.endpoint](**req.view_args)
+  File "/home/sam/tycho_flask/tycho/app/main/routes.py", line 16, in country_rankings
+    bar = plots.create_map(form.emission)
+  File "/home/sam/tycho_flask/tycho/app/main/plots.py", line 24, in create_map
+    pd.read_sql(query.statement, db.engine)
+  File "/home/sam/anaconda3/envs/tycho/lib/python3.8/bdb.py", line 94, in trace_dispatch
+    return self.dispatch_exception(frame, arg)
+  File "/home/sam/anaconda3/envs/tycho/lib/python3.8/bdb.py", line 174, in dispatch_exception
+    if self.quitting: raise BdbQuit
+bdb.BdbQuit
+2020-07-14 00:06:41,062 INFO: Microblog startup [in /home/sam/tycho_flask/tycho/app/__init__.py:42]
+2020-07-14 08:15:06,340 INFO: Microblog startup [in /home/sam/tycho_flask/tycho/app/__init__.py:42]
+2020-07-14 08:15:08,434 ERROR: Exception on /country_rankings [GET] [in /home/sam/anaconda3/envs/tycho/lib/python3.8/site-packages/flask/app.py:1891]
+Traceback (most recent call last):
+  File "/home/sam/anaconda3/envs/tycho/lib/python3.8/site-packages/flask/app.py", line 2447, in wsgi_app
+    response = self.full_dispatch_request()
+  File "/home/sam/anaconda3/envs/tycho/lib/python3.8/site-packages/flask/app.py", line 1952, in full_dispatch_request
+    rv = self.handle_user_exception(e)
+  File "/home/sam/anaconda3/envs/tycho/lib/python3.8/site-packages/flask/app.py", line 1821, in handle_user_exception
+    reraise(exc_type, exc_value, tb)
+  File "/home/sam/anaconda3/envs/tycho/lib/python3.8/site-packages/flask/_compat.py", line 39, in reraise
+    raise value
+  File "/home/sam/anaconda3/envs/tycho/lib/python3.8/site-packages/flask/app.py", line 1950, in full_dispatch_request
+    rv = self.dispatch_request()
+  File "/home/sam/anaconda3/envs/tycho/lib/python3.8/site-packages/flask/app.py", line 1936, in dispatch_request
+    return self.view_functions[rule.endpoint](**req.view_args)
+  File "/home/sam/tycho_flask/tycho/app/main/routes.py", line 16, in country_rankings
+    bar = plots.create_map(form.emission)
+  File "/home/sam/tycho_flask/tycho/app/main/plots.py", line 19, in create_map
+    Plant.emission_cum(emission=emission).label(emission),
+AttributeError: 'NoneType' object has no attribute 'label'
+2020-07-14 08:15:53,112 INFO: Microblog startup [in /home/sam/tycho_flask/tycho/app/__init__.py:42]

@@ -1,0 +1,12 @@
+<table class="table table-hover">
+    <tr>
+        <td width="70px">
+            {{ plant.iso3 }} - {{ plant.plant_id_wri }}<br>
+            Is a {{ plant.wri_capacity_mw }} MW {{ plant.primary_fuel }} fired plant.<br>
+            CO2 lbs: {{ plant.co2_cum }} cumulative, {{ plant.co2_avg }} average per week.<br>
+            NOx lbs: {{ plant.nox_cum }} cumulative, {{ plant.so2_avg }} average per week.<br>
+            SO2 lbs: {{ plant.so2_cum }} cumulative, {{ plant.so2_avg }} average per week.<br>
+
+        </td>
+    </tr>
+</table>

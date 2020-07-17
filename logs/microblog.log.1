@@ -1,0 +1,122 @@
+2020-07-14 08:15:55,987 ERROR: Exception on /country_rankings [GET] [in /home/sam/anaconda3/envs/tycho/lib/python3.8/site-packages/flask/app.py:1891]
+Traceback (most recent call last):
+  File "/home/sam/anaconda3/envs/tycho/lib/python3.8/site-packages/flask/app.py", line 2447, in wsgi_app
+    response = self.full_dispatch_request()
+  File "/home/sam/anaconda3/envs/tycho/lib/python3.8/site-packages/flask/app.py", line 1952, in full_dispatch_request
+    rv = self.handle_user_exception(e)
+  File "/home/sam/anaconda3/envs/tycho/lib/python3.8/site-packages/flask/app.py", line 1821, in handle_user_exception
+    reraise(exc_type, exc_value, tb)
+  File "/home/sam/anaconda3/envs/tycho/lib/python3.8/site-packages/flask/_compat.py", line 39, in reraise
+    raise value
+  File "/home/sam/anaconda3/envs/tycho/lib/python3.8/site-packages/flask/app.py", line 1950, in full_dispatch_request
+    rv = self.dispatch_request()
+  File "/home/sam/anaconda3/envs/tycho/lib/python3.8/site-packages/flask/app.py", line 1936, in dispatch_request
+    return self.view_functions[rule.endpoint](**req.view_args)
+  File "/home/sam/tycho_flask/tycho/app/main/routes.py", line 16, in country_rankings
+    bar = plots.create_map(form.emission)
+  File "/home/sam/tycho_flask/tycho/app/main/plots.py", line 16, in create_map
+    query = db.session.query(Plant.plant_id_wri,
+  File "/home/sam/anaconda3/envs/tycho/lib/python3.8/site-packages/sqlalchemy/orm/scoping.py", line 163, in do
+    return getattr(self.registry(), name)(*args, **kwargs)
+  File "/home/sam/anaconda3/envs/tycho/lib/python3.8/site-packages/sqlalchemy/orm/session.py", line 1584, in query
+    return self._query_cls(entities, self, **kwargs)
+  File "/home/sam/anaconda3/envs/tycho/lib/python3.8/site-packages/sqlalchemy/orm/query.py", line 199, in __init__
+    self._set_entities(entities)
+  File "/home/sam/anaconda3/envs/tycho/lib/python3.8/site-packages/sqlalchemy/orm/query.py", line 225, in _set_entities
+    entity_wrapper(self, ent)
+  File "/home/sam/anaconda3/envs/tycho/lib/python3.8/site-packages/sqlalchemy/orm/query.py", line 4688, in __init__
+    raise sa_exc.InvalidRequestError(
+sqlalchemy.exc.InvalidRequestError: SQL expression, column, or mapped entity expected - got 'None'
+2020-07-14 08:16:20,308 INFO: Microblog startup [in /home/sam/tycho_flask/tycho/app/__init__.py:42]
+2020-07-14 08:20:30,469 INFO: Microblog startup [in /home/sam/tycho_flask/tycho/app/__init__.py:42]
+2020-07-14 08:21:10,870 INFO: Microblog startup [in /home/sam/tycho_flask/tycho/app/__init__.py:42]
+2020-07-14 08:22:31,847 INFO: Microblog startup [in /home/sam/tycho_flask/tycho/app/__init__.py:42]
+2020-07-14 08:24:55,291 INFO: Microblog startup [in /home/sam/tycho_flask/tycho/app/__init__.py:42]
+2020-07-14 08:27:00,812 INFO: Microblog startup [in /home/sam/tycho_flask/tycho/app/__init__.py:42]
+2020-07-14 08:27:56,118 INFO: Microblog startup [in /home/sam/tycho_flask/tycho/app/__init__.py:42]
+2020-07-14 08:29:53,464 INFO: Microblog startup [in /home/sam/tycho_flask/tycho/app/__init__.py:42]
+2020-07-14 08:30:38,857 INFO: Microblog startup [in /home/sam/tycho_flask/tycho/app/__init__.py:42]
+2020-07-14 08:31:10,133 INFO: Microblog startup [in /home/sam/tycho_flask/tycho/app/__init__.py:42]
+2020-07-14 08:32:15,603 INFO: Microblog startup [in /home/sam/tycho_flask/tycho/app/__init__.py:42]
+2020-07-14 08:32:18,242 ERROR: Exception on /country_rankings [GET] [in /home/sam/anaconda3/envs/tycho/lib/python3.8/site-packages/flask/app.py:1891]
+Traceback (most recent call last):
+  File "/home/sam/anaconda3/envs/tycho/lib/python3.8/site-packages/sqlalchemy/sql/compiler.py", line 795, in visit_textual_label_reference
+    col = with_cols[element.element]
+KeyError: 'co2'
+
+The above exception was the direct cause of the following exception:
+
+Traceback (most recent call last):
+  File "/home/sam/anaconda3/envs/tycho/lib/python3.8/site-packages/flask/app.py", line 2447, in wsgi_app
+    response = self.full_dispatch_request()
+  File "/home/sam/anaconda3/envs/tycho/lib/python3.8/site-packages/flask/app.py", line 1952, in full_dispatch_request
+    rv = self.handle_user_exception(e)
+  File "/home/sam/anaconda3/envs/tycho/lib/python3.8/site-packages/flask/app.py", line 1821, in handle_user_exception
+    reraise(exc_type, exc_value, tb)
+  File "/home/sam/anaconda3/envs/tycho/lib/python3.8/site-packages/flask/_compat.py", line 39, in reraise
+    raise value
+  File "/home/sam/anaconda3/envs/tycho/lib/python3.8/site-packages/flask/app.py", line 1950, in full_dispatch_request
+    rv = self.dispatch_request()
+  File "/home/sam/anaconda3/envs/tycho/lib/python3.8/site-packages/flask/app.py", line 1936, in dispatch_request
+    return self.view_functions[rule.endpoint](**req.view_args)
+  File "/home/sam/tycho_flask/tycho/app/main/routes.py", line 16, in country_rankings
+    bar = plots.create_map(emission=form.emission.data)
+  File "/home/sam/tycho_flask/tycho/app/main/plots.py", line 25, in create_map
+    map_df = pd.read_sql(query.statement, db.engine)
+  File "/home/sam/anaconda3/envs/tycho/lib/python3.8/site-packages/pandas/io/sql.py", line 432, in read_sql
+    return pandas_sql.read_query(
+  File "/home/sam/anaconda3/envs/tycho/lib/python3.8/site-packages/pandas/io/sql.py", line 1218, in read_query
+    result = self.execute(*args)
+  File "/home/sam/anaconda3/envs/tycho/lib/python3.8/site-packages/pandas/io/sql.py", line 1087, in execute
+    return self.connectable.execute(*args, **kwargs)
+  File "/home/sam/anaconda3/envs/tycho/lib/python3.8/site-packages/sqlalchemy/engine/base.py", line 2238, in execute
+    return connection.execute(statement, *multiparams, **params)
+  File "/home/sam/anaconda3/envs/tycho/lib/python3.8/site-packages/sqlalchemy/engine/base.py", line 1014, in execute
+    return meth(self, multiparams, params)
+  File "/home/sam/anaconda3/envs/tycho/lib/python3.8/site-packages/sqlalchemy/sql/elements.py", line 298, in _execute_on_connection
+    return connection._execute_clauseelement(self, multiparams, params)
+  File "/home/sam/anaconda3/envs/tycho/lib/python3.8/site-packages/sqlalchemy/engine/base.py", line 1118, in _execute_clauseelement
+    compiled_sql = elem.compile(
+  File "<string>", line 1, in <lambda>
+  File "/home/sam/anaconda3/envs/tycho/lib/python3.8/site-packages/sqlalchemy/sql/elements.py", line 476, in compile
+    return self._compiler(dialect, bind=bind, **kw)
+  File "/home/sam/anaconda3/envs/tycho/lib/python3.8/site-packages/sqlalchemy/sql/elements.py", line 482, in _compiler
+    return dialect.statement_compiler(dialect, self, **kw)
+  File "/home/sam/anaconda3/envs/tycho/lib/python3.8/site-packages/sqlalchemy/sql/compiler.py", line 590, in __init__
+    Compiled.__init__(self, dialect, statement, **kwargs)
+  File "/home/sam/anaconda3/envs/tycho/lib/python3.8/site-packages/sqlalchemy/sql/compiler.py", line 319, in __init__
+    self.string = self.process(self.statement, **compile_kwargs)
+  File "/home/sam/anaconda3/envs/tycho/lib/python3.8/site-packages/sqlalchemy/sql/compiler.py", line 350, in process
+    return obj._compiler_dispatch(self, **kwargs)
+  File "/home/sam/anaconda3/envs/tycho/lib/python3.8/site-packages/sqlalchemy/sql/visitors.py", line 95, in _compiler_dispatch
+    return meth(self, **kw)
+  File "/home/sam/anaconda3/envs/tycho/lib/python3.8/site-packages/sqlalchemy/sql/compiler.py", line 2161, in visit_select
+    text = self._compose_select_body(
+  File "/home/sam/anaconda3/envs/tycho/lib/python3.8/site-packages/sqlalchemy/sql/compiler.py", line 2274, in _compose_select_body
+    text += self.order_by_clause(select, **kwargs)
+  File "/home/sam/anaconda3/envs/tycho/lib/python3.8/site-packages/sqlalchemy/sql/compiler.py", line 2333, in order_by_clause
+    order_by = select._order_by_clause._compiler_dispatch(self, **kw)
+  File "/home/sam/anaconda3/envs/tycho/lib/python3.8/site-packages/sqlalchemy/sql/visitors.py", line 95, in _compiler_dispatch
+    return meth(self, **kw)
+  File "/home/sam/anaconda3/envs/tycho/lib/python3.8/site-packages/sqlalchemy/sql/compiler.py", line 1000, in visit_clauselist
+    text = sep.join(
+  File "/home/sam/anaconda3/envs/tycho/lib/python3.8/site-packages/sqlalchemy/sql/compiler.py", line 1000, in <genexpr>
+    text = sep.join(
+  File "/home/sam/anaconda3/envs/tycho/lib/python3.8/site-packages/sqlalchemy/sql/compiler.py", line 1003, in <genexpr>
+    c._compiler_dispatch(self, **kw) for c in clauselist.clauses
+  File "/home/sam/anaconda3/envs/tycho/lib/python3.8/site-packages/sqlalchemy/sql/visitors.py", line 95, in _compiler_dispatch
+    return meth(self, **kw)
+  File "/home/sam/anaconda3/envs/tycho/lib/python3.8/site-packages/sqlalchemy/sql/compiler.py", line 1237, in visit_unary
+    return self._generate_generic_unary_modifier(
+  File "/home/sam/anaconda3/envs/tycho/lib/python3.8/site-packages/sqlalchemy/sql/compiler.py", line 1384, in _generate_generic_unary_modifier
+    return unary.element._compiler_dispatch(self, **kw) + opstring
+  File "/home/sam/anaconda3/envs/tycho/lib/python3.8/site-packages/sqlalchemy/sql/visitors.py", line 95, in _compiler_dispatch
+    return meth(self, **kw)
+  File "/home/sam/anaconda3/envs/tycho/lib/python3.8/site-packages/sqlalchemy/sql/compiler.py", line 797, in visit_textual_label_reference
+    elements._no_text_coercion(
+  File "/home/sam/anaconda3/envs/tycho/lib/python3.8/site-packages/sqlalchemy/sql/elements.py", line 4735, in _no_text_coercion
+    util.raise_(
+  File "/home/sam/anaconda3/envs/tycho/lib/python3.8/site-packages/sqlalchemy/util/compat.py", line 178, in raise_
+    raise exception
+sqlalchemy.exc.CompileError: Can't resolve label reference for ORDER BY / GROUP BY / DISTINCT etc. Textual SQL expression 'co2' should be explicitly declared as text('co2')
+2020-07-14 08:33:00,933 INFO: Microblog startup [in /home/sam/tycho_flask/tycho/app/__init__.py:42]

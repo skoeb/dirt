@@ -1,0 +1,88 @@
+2020-07-14 08:33:03,198 ERROR: Exception on /country_rankings [GET] [in /home/sam/anaconda3/envs/tycho/lib/python3.8/site-packages/flask/app.py:1891]
+Traceback (most recent call last):
+  File "/home/sam/anaconda3/envs/tycho/lib/python3.8/site-packages/flask/app.py", line 2447, in wsgi_app
+    response = self.full_dispatch_request()
+  File "/home/sam/anaconda3/envs/tycho/lib/python3.8/site-packages/flask/app.py", line 1952, in full_dispatch_request
+    rv = self.handle_user_exception(e)
+  File "/home/sam/anaconda3/envs/tycho/lib/python3.8/site-packages/flask/app.py", line 1821, in handle_user_exception
+    reraise(exc_type, exc_value, tb)
+  File "/home/sam/anaconda3/envs/tycho/lib/python3.8/site-packages/flask/_compat.py", line 39, in reraise
+    raise value
+  File "/home/sam/anaconda3/envs/tycho/lib/python3.8/site-packages/flask/app.py", line 1950, in full_dispatch_request
+    rv = self.dispatch_request()
+  File "/home/sam/anaconda3/envs/tycho/lib/python3.8/site-packages/flask/app.py", line 1936, in dispatch_request
+    return self.view_functions[rule.endpoint](**req.view_args)
+  File "/home/sam/tycho_flask/tycho/app/main/routes.py", line 16, in country_rankings
+    bar = plots.create_map(emission=form.emission.data)
+  File "/home/sam/tycho_flask/tycho/app/main/plots.py", line 27, in create_map
+    fig = px.scatter_mapbox(map_df, lat='latitude', lon='longitude', color='primary_fuel',
+  File "/home/sam/anaconda3/envs/tycho/lib/python3.8/site-packages/plotly/express/_chart_types.py", line 1010, in scatter_mapbox
+    return make_figure(args=locals(), constructor=go.Scattermapbox)
+  File "/home/sam/anaconda3/envs/tycho/lib/python3.8/site-packages/plotly/express/_core.py", line 1431, in make_figure
+    args, trace_specs, grouped_mappings, sizeref, show_colorbar = infer_config(
+  File "/home/sam/anaconda3/envs/tycho/lib/python3.8/site-packages/plotly/express/_core.py", line 1275, in infer_config
+    args = build_dataframe(args, all_attrables, array_attrables)
+  File "/home/sam/anaconda3/envs/tycho/lib/python3.8/site-packages/plotly/express/_core.py", line 1037, in build_dataframe
+    raise ValueError(err_msg)
+ValueError: Value of 'hover_data_1' is not the name of a column in 'data_frame'. Expected one of ['plant_id_wri', 'iso3', 'longitude', 'latitude', 'co2_cum', 'wri_capacity_mw', 'primary_fuel'] but received: co2
+2020-07-14 08:33:54,381 INFO: Microblog startup [in /home/sam/tycho_flask/tycho/app/__init__.py:42]
+2020-07-14 08:35:11,086 INFO: Microblog startup [in /home/sam/tycho_flask/tycho/app/__init__.py:42]
+2020-07-14 08:36:08,349 INFO: Microblog startup [in /home/sam/tycho_flask/tycho/app/__init__.py:42]
+2020-07-14 08:36:24,252 INFO: Microblog startup [in /home/sam/tycho_flask/tycho/app/__init__.py:42]
+2020-07-14 08:36:34,734 INFO: Microblog startup [in /home/sam/tycho_flask/tycho/app/__init__.py:42]
+2020-07-14 08:38:17,442 INFO: Microblog startup [in /home/sam/tycho_flask/tycho/app/__init__.py:42]
+2020-07-14 08:38:33,053 INFO: Microblog startup [in /home/sam/tycho_flask/tycho/app/__init__.py:42]
+2020-07-15 16:35:27,217 INFO: Microblog startup [in /home/sam/tycho_flask/tycho/app/__init__.py:42]
+2020-07-15 16:53:47,301 INFO: Microblog startup [in /home/sam/tycho_flask/tycho/app/__init__.py:42]
+2020-07-15 16:53:50,510 ERROR: Exception on /country_rankings [GET] [in /home/sam/anaconda3/envs/tycho/lib/python3.8/site-packages/flask/app.py:1891]
+Traceback (most recent call last):
+  File "/home/sam/anaconda3/envs/tycho/lib/python3.8/site-packages/flask/app.py", line 2447, in wsgi_app
+    response = self.full_dispatch_request()
+  File "/home/sam/anaconda3/envs/tycho/lib/python3.8/site-packages/flask/app.py", line 1953, in full_dispatch_request
+    return self.finalize_request(rv)
+  File "/home/sam/anaconda3/envs/tycho/lib/python3.8/site-packages/flask/app.py", line 1968, in finalize_request
+    response = self.make_response(rv)
+  File "/home/sam/anaconda3/envs/tycho/lib/python3.8/site-packages/flask/app.py", line 2097, in make_response
+    raise TypeError(
+TypeError: The view function did not return a valid response. The function either returned None or ended without a return statement.
+2020-07-15 16:54:29,836 INFO: Microblog startup [in /home/sam/tycho_flask/tycho/app/__init__.py:42]
+2020-07-15 16:54:32,217 ERROR: Exception on /country_rankings [GET] [in /home/sam/anaconda3/envs/tycho/lib/python3.8/site-packages/flask/app.py:1891]
+Traceback (most recent call last):
+  File "/home/sam/anaconda3/envs/tycho/lib/python3.8/site-packages/flask/app.py", line 2447, in wsgi_app
+    response = self.full_dispatch_request()
+  File "/home/sam/anaconda3/envs/tycho/lib/python3.8/site-packages/flask/app.py", line 1952, in full_dispatch_request
+    rv = self.handle_user_exception(e)
+  File "/home/sam/anaconda3/envs/tycho/lib/python3.8/site-packages/flask/app.py", line 1821, in handle_user_exception
+    reraise(exc_type, exc_value, tb)
+  File "/home/sam/anaconda3/envs/tycho/lib/python3.8/site-packages/flask/_compat.py", line 39, in reraise
+    raise value
+  File "/home/sam/anaconda3/envs/tycho/lib/python3.8/site-packages/flask/app.py", line 1950, in full_dispatch_request
+    rv = self.dispatch_request()
+  File "/home/sam/anaconda3/envs/tycho/lib/python3.8/site-packages/flask/app.py", line 1936, in dispatch_request
+    return self.view_functions[rule.endpoint](**req.view_args)
+  File "/home/sam/tycho_flask/tycho/app/main/routes.py", line 18, in country_rankings
+    return render_template('country_rankings.html', plot=bar, form=form)
+UnboundLocalError: local variable 'bar' referenced before assignment
+2020-07-15 16:54:33,507 ERROR: Exception on /country_rankings [GET] [in /home/sam/anaconda3/envs/tycho/lib/python3.8/site-packages/flask/app.py:1891]
+Traceback (most recent call last):
+  File "/home/sam/anaconda3/envs/tycho/lib/python3.8/site-packages/flask/app.py", line 2447, in wsgi_app
+    response = self.full_dispatch_request()
+  File "/home/sam/anaconda3/envs/tycho/lib/python3.8/site-packages/flask/app.py", line 1952, in full_dispatch_request
+    rv = self.handle_user_exception(e)
+  File "/home/sam/anaconda3/envs/tycho/lib/python3.8/site-packages/flask/app.py", line 1821, in handle_user_exception
+    reraise(exc_type, exc_value, tb)
+  File "/home/sam/anaconda3/envs/tycho/lib/python3.8/site-packages/flask/_compat.py", line 39, in reraise
+    raise value
+  File "/home/sam/anaconda3/envs/tycho/lib/python3.8/site-packages/flask/app.py", line 1950, in full_dispatch_request
+    rv = self.dispatch_request()
+  File "/home/sam/anaconda3/envs/tycho/lib/python3.8/site-packages/flask/app.py", line 1936, in dispatch_request
+    return self.view_functions[rule.endpoint](**req.view_args)
+  File "/home/sam/tycho_flask/tycho/app/main/routes.py", line 18, in country_rankings
+    return render_template('country_rankings.html', plot=bar, form=form)
+UnboundLocalError: local variable 'bar' referenced before assignment
+2020-07-15 16:54:49,484 INFO: Microblog startup [in /home/sam/tycho_flask/tycho/app/__init__.py:42]
+2020-07-15 17:28:57,022 INFO: Microblog startup [in /home/sam/tycho_flask/tycho/app/__init__.py:46]
+2020-07-15 17:36:17,093 INFO: Microblog startup [in /home/sam/tycho_flask/tycho/app/__init__.py:46]
+2020-07-15 17:36:38,757 INFO: Microblog startup [in /home/sam/tycho_flask/tycho/app/__init__.py:46]
+2020-07-15 17:43:34,274 INFO: Microblog startup [in /home/sam/tycho_flask/tycho/app/__init__.py:46]
+2020-07-15 17:45:11,789 INFO: Microblog startup [in /home/sam/tycho_flask/tycho/app/__init__.py:46]

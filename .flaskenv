@@ -1,0 +1,2 @@
+FLASK_APP=dirt.py
+FLASK_ENV=development
