@@ -1,7 +1,7 @@
 from app.main import bp
 from app.main import plots
 from app import db
-from models import Plant, Prediction, Country
+from models import Plant, Predictions, Country, Dirtiest
 from flask import Flask, render_template, redirect, request, jsonify
 from app.main.forms import EmissionForm
 
@@ -28,7 +28,7 @@ def map_update():
 def plant_rankings():
 
     # --- create list of countries for dropdown ---
-    countries = db.session.query(Country.iso3).distinct()
+    countries = db.session.query(Country.country).distinct()
     countries = [i[0] for i in countries]
     countries.insert(0,'WORLD')
     selected_country = 'WORLD'

@@ -1,12 +1,55 @@
-<table class="table table-hover">
-    <tr>
-        <td width="70px">
-            {{ plant.iso3 }} - {{ plant.plant_id_wri }}<br>
-            Is a {{ plant.wri_capacity_mw }} MW {{ plant.primary_fuel }} fired plant.<br>
-            CO2 lbs: {{ plant.co2_cum }} cumulative, {{ plant.co2_avg }} average per week.<br>
-            NOx lbs: {{ plant.nox_cum }} cumulative, {{ plant.so2_avg }} average per week.<br>
-            SO2 lbs: {{ plant.so2_cum }} cumulative, {{ plant.so2_avg }} average per week.<br>
+<div class="container-fluid rounded" style="border:1px solid #E7E7E7; background-color: #F8F8F8;">
 
-        </td>
-    </tr>
-</table>
+  <div class="row">
+    <div class="col text-center">
+      <b>Plant name plain text</b>
+      <i>{{ plant.gppd_idnr }}</i>
+    </div>
+    <div class="col-9">
+    </div>
+  </div>
+  <div class="row">
+    <div class="col">
+      <div id="map_{{ plant.gppd_idnr }}" style="width: 100%; height: 240px"></div>
+    </div>
+    <div class="col-9">
+      #PlantID is the #rank dirtiest plant in #country.
+      Based on our estimates, it produces over {{ (plant.cum_co2/2000000000)|round(2)}} Million Tons of CO2 Per Year,
+      along with {{ (plant.cum_nox/2000)|round(2)}} Tons of NOx emissions, and {{ (plant.cum_so2/2000)|round(2)}} Tons of SO2 emissions.
+      <br>
+      These emissions comprise #pct_of_country of #country total annual CO2 emissions, and replacing it with 
+
+    </div>
+  </div>
+
+</div>
+
+<!-- Leaflet Map -->
+<script>
+  // The first parameter are the coordinates of the center of the map
+  // The second parameter is the zoom level
+  var map = L.map("map_{{ plant.gppd_idnr }}").setView([{{ plant.latitude }}, {{ plant.longitude }}], 10);
+  
+  // {s}, {z}, {x} and {y} are placeholders for map tiles
+  // {x} and {y} are the x/y of where you are on the map
+  // {z} is the zoom level
+  // {s} is the subdomain of cartodb
+    var layer = L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+    attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
+  });
+  
+  // Now add the layer onto the map
+  map.addLayer(layer);
+
+  // Add Marker
+  L.marker([{{ plant.latitude }}, {{ plant.longitude }}]).addTo(map).bindPopup("{{ plant.gppd_idnr }}");
+
+  // Disable map control
+  map.touchZoom.disable();
+  map.doubleClickZoom.disable();
+  map.scrollWheelZoom.disable();
+  map.boxZoom.disable();
+  map.keyboard.disable();
+  // map.removeControl(map.zoomControl);
+
+</script>
