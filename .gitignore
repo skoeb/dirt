@@ -1,0 +1,6 @@
+*.sqlite
+__pycache__/
+.vscode/
+app/__pycache__/
+app/main/__pycache__/
+*.pyc

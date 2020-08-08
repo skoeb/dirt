@@ -12,6 +12,12 @@ class Plant(db.Model):
     __table__ = db.Model.metadata.tables['plant']
     __mapper_args__ = {'primary_key': [__table__.c.plant_id_wri]} 
 
+    @hybrid_property
+    def pct_of_country_co2(self):
+        country_co2 = db.session.query(Country.cum_co2).filter(Country.country == self.country)[0][0]
+        return self.cum_co2 / country_co2
+
+
 class Predictions(db.Model):
     __table__ = db.Model.metadata.tables['predictions']
     __mapper_args__ = {'primary_key': [__table__.c.plant_id_wri]} 

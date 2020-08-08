@@ -1,50 +1,75 @@
   
-<head>
-<!-- DataTable -->
-<link href="https://cdn.datatables.net/1.10.16/css/jquery.dataTables.min.css" rel="stylesheet">
-
-<!-- Plotly -->
-<script src="https://cdn.plot.ly/plotly-latest.min.js"></script>
 
 {% extends "base.html" %}
     
 {% block app_content %}
 
-<body>
-
-<!-- <h1>This is the country rankings</h1> -->
-
+<!-- Intro Container -->
 <div class="container">
 
+    <!-- Intro Text-->
+    <div class="row my-4">
+        <p>
+        The map below displays the emissions from every power plant in the world included in the
+        <a href=https://datasets.wri.org/dataset/globalpowerplantdatabase> World Resource's Institute Global Power Plant Database from 2019.</a>
+        Using sophisticated machine learning techniques combined with daily spectral imagery provided by the European Space Agency's
+        <a href = https://sentinel.esa.int/web/sentinel/missions/sentinel-2>Sentinel-2</a> satellite, we are able to attribute observed emissions
+        to specific powerplants. While the map below displays cumulative emissions from 2019, our model is capable of predicting daily emissions through
+        the previous day.
+        <!-- If you want to be notified when these updates are available, please subscribe to our email list.    -->
+        </p>
+    </div>
+
+    <!-- Dropdown Text -->
+    <div class="row my-4">
+        From the dropdown menu below, you can select between the three smoke-stack emission sources we model: CO2, NOx, and SO2.
+    </div>
+    
+    <div>
+        <ul class="row">
+            <li>CO2 (carbon dioxide) is a high priority emission source responsible for <a href=https://www.ipcc.ch/site/assets/uploads/2018/02/WG1AR5_Chapter08_FINAL.pdf>approximately 70%</a> of the increased greenhouse effect brought on by human caused climate change.</li>
+            <li>NOx (nitrogen oxides) are an air pollution source that interact with oxygen to create excessive troposhperic ozone buildups along with acid rain and smog.</li>
+            <li>SO2 (sulfur dioxide) is a toxic gas that is known to have significant effects upon human health.</li>
+        </ul>
+    </div>
+
     <!-- Emission Selector -->
-    <div class="form-group">
-        <label for="map-emisison-select">Emission Source to Plot</label>
+    <div class="row form-group">
+        <label for="map-emisison-select"><b>Emission Source to Plot</b></label>
         <select id="map-emission-select" class="form-control">
             <option value="co2">Carbon Dioxide (CO2)</option>
             <option value="nox">Nitrogen Oxides (NOx)</option>
             <option value="so2">Sulfur Dioxide (SO2)</option>
         </select>
     </div>
+</div>
 
-    <!-- Map -->
-    <div class="row row-no-gutters">
-        <div class="col-lg-12">
-            <div class="chart" id="country-map">
-                <script>
-                    var graphs = {{plot | safe}};
-                    Plotly.react('country-map', graphs, {});
-                </script>
-            </div>
-        </div>
+<!-- Map -->
+<div class="container-fluid">
+    <div class="row" id="country-map">
+        <script>
+            var graphs = {{plot | safe}};
+            Plotly.newPlot('country-map', graphs, {}, {scrollZoom : false});
+        </script>
+    </div>
+</div>
+
+<!-- Table Text -->
+<div class="container">
+    <div class="row mb-4">
+        <p>
+        Using the same data as in the map above, the table below aggregates 2019 power plant smoke-stack emissions at the country level.
+        Columns in the table can be sorted or searched. 
+        </p>
     </div>
 
     <!-- Table -->
     <div>
         {{table | safe}}
     </div>
-
 </div>
 
+<!-- ---------------------------------------------------------------------------------------------------------- -->
 <!-- Map jQuery -->
 <script type="text/javascript">
     $('#map-emission-select').on('change', function(){
@@ -57,18 +82,20 @@
             },
             dataType: "json",
             success: function (data) {
-                Plotly.react('country-map', data );
+                Plotly.react('country-map', data);
             }
         });
     })
 </script>
 
-<!-- DataTable -->
-<script src="https://cdn.datatables.net/1.10.16/js/jquery.dataTables.min.js" type="text/javascript"></script>
-
 <script type="text/javascript">
-    $('#emission-table').DataTable();
+    $('#emission-table').DataTable({
+        "columnDefs": [
+        {"className": "dt-center", "targets": "_all"}
+      ],
+      "info" : false,
+      order: [[1, 'desc']]
+    })
 </script>
 
 {% endblock %}
-</body>

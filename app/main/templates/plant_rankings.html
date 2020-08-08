@@ -3,45 +3,52 @@
 
 {% block app_content %}
 
-<body>
+<div class="container my-4">
 
-    <h1>This is the plant rankings</h1>
-
-    <div class="container">
-
-        <!-- Emission Selector -->
-        <div class="form-group">
-            <label for="plant-country-select">Dirtiest Power Plants In:</label>
-            <select id="plant-country-select" class="form-control">
-                {% for country in countries %}
-                    "<option >{{ country }}</option>"
-                {% endfor %}
-            </select>
-        </div>
-        
-        <!-- Plants -->
-        <div id='plant-response'>
-            {% include '_plant_loop.html' %}
-        </div>
+    <div class="row my-4">
+       By selecting a country below, you can view an ordered list of power plants ordered by attributable co2 smoke-stack emissions.
+       Users are encouraged to use their own knowledge of country specific emission reporting requirements to compare official
+       power plant emission reporting (if any exists) with the modeled results displayed below. 
+       The dirtiest power plants, those with the highest emissions in the world, are low hanging fruits for policy makers, regulators, activists and environmentalists
+       to scrutinize and target for replacement with economic renewable energy sources.
+       and storage technologies. Below each description of the power plant is a representation of the equivelancy of the power plant's emissions in other units
+       using calculations provided by the <a href=https://www.epa.gov/energy/greenhouse-gas-equivalencies-calculator>Environmental Protection Agency</a>.
     </div>
 
-    <!-- Map jQuery -->
-    <script type="text/javascript">
-        $('#plant-country-select').on('change', function(){
-            $.ajax({
-                url: {{ url_for("main.plant_update")|tojson|safe }},
-                type: "GET",
-                contentType: 'application/json;charset=UTF-8',
-                data: {
-                    'selected': document.getElementById('plant-country-select').value
-                },
-                dataType: "json",
-                success: function (resp) {
-                    $('#plant-response').html(resp.data)
-                }
-            });
-        })
-    </script>
+
+    <!-- Emission Selector -->
+    <div class="row form-group">
+        <label for="plant-country-select my-4"><b>Dirtiest Power Plants In:</b></label>
+        <select id="plant-country-select my-4" class="form-control">
+            {% for country in countries %}
+                "<option >{{ country }}</option>"
+            {% endfor %}
+        </select>
+    </div>
     
-    {% endblock %}
-    </body>
+    <!-- Plants -->
+    <div class='row' id='row plant-response'>
+        {% include '_plant_loop.html' %}
+    </div>
+
+</div>
+
+<!-- Map jQuery -->
+<script type="text/javascript">
+    $('#plant-country-select').on('change', function(){
+        $.ajax({
+            url: {{ url_for("main.plant_update")|tojson|safe }},
+            type: "GET",
+            contentType: 'application/json;charset=UTF-8',
+            data: {
+                'selected': document.getElementById('plant-country-select').value
+            },
+            dataType: "json",
+            success: function (resp) {
+                $('#plant-response').html(resp.data)
+            }
+        });
+    })
+</script>
+    
+{% endblock %}

@@ -7,7 +7,7 @@ from app.main.forms import EmissionForm
 
 @bp.route('/')
 def index():
-    return render_template('base.html')
+    return render_template('methodology.html')
 
 @bp.route('/country_rankings', methods=['GET','POST'])
 def country_rankings():
@@ -16,11 +16,16 @@ def country_rankings():
     country_table = plots.create_table(emission)
     return render_template('country_rankings.html',
                             plot=country_map,
-                            table=country_table.to_html(table_id='emission-table'))
+                            table=country_table.to_html(table_id='emission-table',
+                                                    classes='table table-striped',
+                                                    justify='center',
+                                                    border=False, index=False))
 
 @bp.route('/map_update', methods=['GET', 'POST'])
 def map_update():
+    print('UPDATE MAP')
     emission = request.args['selected']
+    print(emission)
     graphJSON = plots.create_map(emission)
     return graphJSON
 
@@ -28,10 +33,10 @@ def map_update():
 def plant_rankings():
 
     # --- create list of countries for dropdown ---
-    countries = db.session.query(Country.country).distinct()
+    countries = db.session.query(Country.country_long).distinct()
     countries = [i[0] for i in countries]
-    countries.insert(0,'WORLD')
-    selected_country = 'WORLD'
+    countries.insert(0,'World')
+    selected_country = 'World'
 
     emission='co2'
     plants = plots.create_plant_text(emission, selected_country)
@@ -39,6 +44,7 @@ def plant_rankings():
 
 @bp.route('/plant_update', methods=['GET','POST'])
 def plant_update():
+    print('UPDATE PLANTS')
     emission = 'co2'
     selected_country = request.args['selected']
     print(selected_country)

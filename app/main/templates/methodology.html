@@ -1,5 +1,139 @@
 {% extends "base.html" %}
 
 {% block app_content %}
-    <h1>This is the methodology</h1>
+<div class="container my-4">
+
+    <figure class="figure">
+        <img src=" {{url_for('static', filename='jumbotron_emissions_CO_cropped.png') }}" class="figure-img img-fluid rounded" >
+        <figcaption class="figure-caption">Average daily CO emissions processed by Tycho from Sentinel-5P data.</figcaption>
+    </figure>
+
+    <div class="lead text-justify row mb-4">
+        <p>
+            For too long, the power generation sector has obscured, under reported, or failed to track smoke-stack emissions from the 4,693 fossil-fueled power plants
+            in the world. Despite the fact that the power sector is responsible for roughly a third of total human-caused greenhouse gas emissions, data attributing
+            emissions to specific plants or days of operation has historically not been tracked. This project was founded on the belief that a small number of large,
+            dirty power plants are likely responsible for a significant proportion of cumulative power sector emissions. With knowledge of where these plants are policy
+            makers, activists, and regulators may be better equipped to scrutinize the impact the oversized contribution towards climate change they are causing.
+            <i>The World's Dirtiest Power Plants</i> uses new multi-spectral satellite data sources along with a sophisticated machine learning model and robust data
+            sources to provide and independent solution to this problem.</p> 
+    </div>
+
+    <div class="row">        
+        <h4>Introducing Our Model: Tycho</h4>
+    </div>
+
+    <div class="text-justify row my-4">
+        <p>
+            Most present-day emission measurement techniques require empirical and trusted knowledge of plant generation data (such as hourly capacity factor)
+            to model emissions based on near-linear emission curves. These methods are vulnerable to 'garbage in garbage out' syndrome.  While there are high
+            levels of support for international climate agreements that mandate routine reporting of emissions, multiple instances of misleading emissions claims
+            have been made by power producers, utilities, and governments.
+        </p>
+    </div>
+    
+    <div class="text-justify row my-4">
+        <p>
+        In order to make the predictions available to explore on the <a href={{ url_for('main.plant_rankings') }}>Plant Rankings</a> and <a href={{ url_for('main.country_rankings') }}> Country Rankings</a>,
+        pages, the team behind <b>The World's Dirtiest Power Plants</b> needed to create a new modelling approach.
+        Tycho is a power-sector (scope 2) emissions measurement data collection and supervised machine learning pipeline capable of attributing emissions
+        to individual power plants on a given day using a prediction process. 
+        </p>
+    </div>
+    
+    <div class="text-justify row">
+        Advantages of Tycho's ETL and modelling pipeline include:
+        <ul>
+            <li><b>Automated querying of Sentinel-5P's data hosted on AWS S3</b> for an expert-filtered and cleaned set of coordinates representing power plants from Global Power Plant Database.
+            <li><b>Feature Engineering already done for you</b>, with expert-selected features to inform your modelling.</li>
+            <li><b>Testing</b> built in to assure that merges are working right.</li>
+            <li>and lastly, a clean, well-documented, object-oriented code base that is extensible to novel modelling techniques</li>
+        </ul>
+        </p>
+    </div>
+
+    <hr />
+
+    <div class="row my-4">
+        <h4>Tycho's Modelling Process in Three Steps:</h4>
+    </div>
+
+    <div class="row">        
+        <h5>1) Extract, Transforming, and Loading (ETL) Power Plant Data</h5>
+    </div>
+
+    <div class="text-justify row mb-4">
+        <p>
+        Tycho constructs a training data set using known power plant attributes and emissions from within the United States.
+        These data sources include the Environmental Protection Agency's Continuous Emission Monitoring System (EPA CEMS) and the Energy Information
+        Administration's Form 860 (EIA 860). EPA CEMS requires some U.S. power plants to report hourly CO2, SO2, and NOX emissions at the generator level. 
+        These are aggregated at the plant level by day to understand the cumulative known emissions. This data is combined with attributes from EIA 860, which
+        includes annual information on plant capacity, primary fuel, latitude and longitude, and utilization. Additional data is loaded for each day including the
+        locations historical daily weather (including attributes such as average daily wind direction and speed).
+        </p>
+    </div>
+
+    <div class="row">        
+        <h5>2) Process Remote Sensing (Satellite) Data</h5>
+    </div>
+
+    <div class="text-justify row mb-4">
+        <p>
+        Data from the European Space Agency's Sentinel-5P Satellite is downloaded and aggregated to form daily cumulative images of emissions.
+        While this data is rich, it is noisy and non-associated with specific power plants or other emission sources. In order to associate specific emissions
+        with power plants. While the data from Sentinel-5 has been made publicly available since mid-2019, it remains difficult to process and aggregate this data. 
+        Additionally, the rasterized measurements from Sentinel can be difficult to attribute to specific power plants, or even sources of emissions 
+        (i.e. Coal plant near a city with heavy combustion engine vehicle traffic). 
+        Tycho aims to remedy this problem, by providing a clean and robust training set linking specific observations (rows) from measured power plant data with representations of Sentinel-5 observations.
+        To isolate emissions from specific power plants, we measure the emissions within a circular-segmented cone extruding from the latitude and longitude coordinates of the power plant.
+        The size (in radius and degrees) of the cones are fit using a preliminary bayesian optimization approach. 
+        Using data from the day's average wind direction, we overlay two cones one pointing <i>up wind</i> (i.e. what should be background emissions), and a second pointed <i>down wind</i>, and take the sum of emissions within each cone. 
+        Aggregated values from the up wind, down wind and the difference of the two are later provided as features from the machine learning algorithm.
+        </p>
+    </div>
+
+    <div class="row">        
+        <h5>3) Train a Machine Learning Model</h5>
+    </div>
+
+    <div class="text-justify row mb-4">
+        <p>
+        Using the training set of known historical emissions outlined in step 1, and the synthesized remote sensing images described in step 2, we are able to train a machine learning model to estimate
+        emissions from specific plants. Four models are separately trained to predict the daily <b>Gross Load (MW)</b>, <b>CO2</b>, <b>SO2</b>, and <b>NOX</b> emissions. Models are trained using known
+        data from U.S. power plants from the EPA CEMS. The current models used are <a href=https://xgboost.readthedocs.io/en/latest/>XGBoost</a> models with hyper-parameters
+        tuned using a Bayesian Optimization approach. 
+        A holdout set of U.S. power plants are used to evaluate model performance. Once the model is trained, it is used to predict power plant emissions for the
+        rest of the world using known plant locations from the WRI GPPDB.
+        </p>
+    </div>
+
+    <hr />
+
+    <div class="jumbotron">
+        <div class="row">        
+            <h4>Contribute to Tycho</h4>
+        </div>
+
+        <div class="text-justify row my-4">
+            <p>
+            The Tycho model is still underdevelopment. All predictions available on this website at this point should be interpreted as preliminary results that tend to indicate the magnitude of emissions from a particular
+            power plant, however exact predictions will likely improve in accuracy as further model development takes place. We currently have a number of features and modelling changes on our todo list, including
+
+            <ul>
+                <li>Expanding the training dataset to include European emission monitoring sources.</li>
+                <li>Testing a LSTM Neural Network for predicting emissions.</li>
+                <li>Implementing streaming data predictions as additional Sentinel-5P data becomes available.</li>
+            </ul>
+            </p>
+        </div>
+
+        <div class="row my-4">
+            <div class="col text-center">
+                <a class="btn btn-lg btn-primary" href="https://github.com/skoeb/tycho" role="button">View Tycho on GitHub</a>
+                <!-- <iframe src="https://ghbtns.com/github-btn.html?user=skoeb&repo=tycho&type=watch&count=true&size=large&v=2" frameborder="0" scrolling="0" width="200" height="30" title="GitHub"></iframe> -->
+            </div>
+        </div>
+    </div>
+    
+</div>
 {% endblock %}

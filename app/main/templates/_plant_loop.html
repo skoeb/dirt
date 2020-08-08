@@ -1,5 +1,6 @@
 
 {% for plant in plants %}
+    {% set plant_loop = loop %}
     {% include '_plant.html' %}
     <br>
 {% endfor %}
