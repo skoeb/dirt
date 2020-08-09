@@ -23,11 +23,16 @@ def country_rankings():
 
 @bp.route('/map_update', methods=['GET', 'POST'])
 def map_update():
-    print('UPDATE MAP')
     emission = request.args['selected']
-    print(emission)
     graphJSON = plots.create_map(emission)
     return graphJSON
+
+@bp.route('/dirtiest_spline_update', methods=['GET', 'POST'])
+def dirtiest_spline_update():
+    emission = request.args['selected']
+    graphJSON = plots.spline_dirtiest_plants(emission)
+    return graphJSON
+
 
 @bp.route('/plant_rankings')
 def plant_rankings():
@@ -42,15 +47,6 @@ def plant_rankings():
     plants = plots.create_plant_text(emission, selected_country)
     return render_template('plant_rankings.html', countries=countries, plants=plants)
 
-@bp.route('/plant_update', methods=['GET','POST'])
-def plant_update():
-    print('UPDATE PLANTS')
-    emission = 'co2'
-    selected_country = request.args['selected']
-    print(selected_country)
-    plants = plots.create_plant_text(emission, selected_country)
-    plantsJSON = jsonify({'data': render_template('_plant_loop.html', plants=plants)})
-    return plantsJSON
 
 @bp.route('/explore_the_data')
 def explore_the_data():
