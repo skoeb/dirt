@@ -16,18 +16,18 @@
     </div>
 
 
-    <!-- Emission Selector -->
+    <!-- Country Selector -->
     <div class="row form-group">
-        <label for="plant-country-select my-4"><b>Dirtiest Power Plants In:</b></label>
-        <select id="plant-country-select my-4" class="form-control">
+        <label for="country-select"><b>Dirtiest Power Plants In:</b></label>
+        <select id="country-select" class="form-control">
             {% for country in countries %}
-                "<option >{{ country }}</option>"
+                "<option>{{ country }}</option>"
             {% endfor %}
         </select>
     </div>
     
     <!-- Plants -->
-    <div class='row' id='row plant-response'>
+    <div class='row' id='plant-response'>
         {% include '_plant_loop.html' %}
     </div>
 
@@ -35,13 +35,13 @@
 
 <!-- Map jQuery -->
 <script type="text/javascript">
-    $('#plant-country-select').on('change', function(){
+    $('#country-select').on('change', function(){
         $.ajax({
             url: {{ url_for("main.plant_update")|tojson|safe }},
             type: "GET",
             contentType: 'application/json;charset=UTF-8',
             data: {
-                'selected': document.getElementById('plant-country-select').value
+                'selected': document.getElementById('country-select').value
             },
             dataType: "json",
             success: function (resp) {

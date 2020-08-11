@@ -18,7 +18,7 @@
       <div id="map_{{ plant.plant_id_wri }}" style="width: 100%; height: 240px"></div>
     </div>
     <div class="col-9">
-      {{ plant.name|title }} is the {{ loop.index|humanize('ordinal')|humanize('intcomma')}} dirtiest plant in {{ plant-country-select.value }}.
+      {{ plant.name|title }} is the {{ loop.index|humanize('ordinal')|humanize('intcomma')}} dirtiest plant for the selected country.
       Based on our modelling estimates, it produced {{ (plant.cum_co2/2000)|humanize('intword')|humanize('intcomma')}} tons of CO2 in 2019,
       along with {{ plant.cum_nox|humanize('intword')}} lbs of NOx emissions and {{ plant.cum_so2|humanize('intword')|humanize('intcomma') }} lbs of SO2 emissions.
       

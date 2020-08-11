@@ -69,7 +69,7 @@ def init_callbacks(dash_app):
         query = f"""
                 WITH dirtiest_world AS (
                     SELECT *
-                    FROM plant
+                    FROM {config.SCHEMA}.plant
                     ORDER BY cum_{switches['variable'].replace('_lbs','')} DESC
                     LIMIT 20
                 )

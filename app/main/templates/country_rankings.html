@@ -35,8 +35,8 @@
 
     <!-- Emission Selector -->
     <div class="row form-group">
-        <label for="map-emisison-select"><b>Emission Source to Plot</b></label>
-        <select id="map-emission-select" class="form-control">
+        <label for="emission-select"><b>Emission Source to Plot</b></label>
+        <select id="emission-select" class="form-control">
             <option value="co2">Carbon Dioxide (CO2)</option>
             <option value="nox">Nitrogen Oxides (NOx)</option>
             <option value="so2">Sulfur Dioxide (SO2)</option>
@@ -72,13 +72,13 @@
 <!-- ---------------------------------------------------------------------------------------------------------- -->
 <!-- Map jQuery -->
 <script type="text/javascript">
-    $('#map-emission-select').on('change', function(){
+    $('#emission-select').on('change', function(){
         $.ajax({
             url: {{ url_for("main.map_update")|tojson|safe }},
             type: "GET",
             contentType: 'application/json;charset=UTF-8',
             data: {
-                'selected': document.getElementById('map-emission-select').value
+                'selected': document.getElementById('emission-select').value
             },
             dataType: "json",
             success: function (data) {
