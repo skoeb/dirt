@@ -3,35 +3,35 @@
   <div class="row">
     <div class="col text-center">
       <br>
-      Country: <i>{{ plant.country_long|truncate(15, False, '') }}</i><br>
-      Plant ID: <i>{{ plant.plant_id_wri|truncate(20) }}</i><br>
-      Primary Fuel: <i>{{ plant.primary_fuel }}</i><br>
+      Country: <i>{{ plant_dict['country_long']|truncate(15, False, '') }}</i><br>
+      Plant ID: <i>{{ plant_dict['plant_id_wri']|truncate(40) }}</i><br>
+      Primary Fuel: <i>{{ plant_dict['primary_fuel'] }}</i><br>
       <br>
     </div>
     <div class="col-9 align-self-center">
-      <h4>  {{ loop.index }}) {{ plant.name|truncate(20)|title }}</h4>
+      <h4>  {{ loop.index }}) {{ plant_dict['name']|truncate(20)|title }}</h4>
     </div>
   </div>
 
   <div class="row">
     <div class="col">
-      <div id="map_{{ plant.plant_id_wri }}" style="width: 100%; height: 240px"></div>
+      <div id="map_{{ plant_dict['plant_id_wri'] }}" style="width: 100%; height: 240px"></div>
     </div>
     <div class="col-9">
-      {{ plant.name|title }} is the {{ loop.index|humanize('ordinal')|humanize('intcomma')}} dirtiest plant for the selected country.
-      Based on our modelling estimates, it produced {{ (plant.cum_co2/2000)|humanize('intword')|humanize('intcomma')}} tons of CO2 in 2019,
-      along with {{ plant.cum_nox|humanize('intword')}} lbs of NOx emissions and {{ plant.cum_so2|humanize('intword')|humanize('intcomma') }} lbs of SO2 emissions.
+      {{ plant_dict['name']|title }} is the {{ loop.index|humanize('ordinal')|humanize('intcomma')}} dirtiest plant for the selected country.
+      Based on our modelling estimates, it produced {{ (plant_dict['cum_co2_lbs']/2000)|humanize('intword')|humanize('intcomma')}} tons of CO2 in 2019,
+      along with {{ plant_dict['cum_nox_lbs']|humanize('intword')}} lbs of NOx emissions and {{ plant_dict['cum_so2_lbs']|humanize('intword')|humanize('intcomma') }} lbs of SO2 emissions.
       
       <br><br>
       The 2019 emissions from this plant were equivelant to:
       <ul>
-        <li>{{ (plant.cum_co2 / 2204 / 181.85)|humanize('intword')|humanize('intcomma') }} railcars full of coal</li>
-        <li>{{ (plant.cum_co2 / 2204 / 4.63)|humanize('intword')|humanize('intcomma') }} average American cars driven for a year.
-        <li>the emissions avoided by {{ (plant.cum_co2 / 2204 / 4632)|humanize('intword')|humanize('intcomma') }} wind turbines.</ll>
-        <li>the emissions sequested by {{ (plant.cum_co2 / 2204 / 0.77)|humanize('intword')|humanize('intcomma') }} acres of forest.</ll>
+        <li>{{ (plant_dict['cum_co2_lbs'] / 2204 / 181.85)|humanize('intword')|humanize('intcomma') }} railcars full of coal</li>
+        <li>{{ (plant_dict['cum_co2_lbs'] / 2204 / 4.63)|humanize('intword')|humanize('intcomma') }} average American cars driven for a year.
+        <li>the emissions avoided by {{ (plant_dict['cum_co2_lbs'] / 2204 / 4632)|humanize('intword')|humanize('intcomma') }} wind turbines.</ll>
+        <li>the emissions sequested by {{ (plant_dict['cum_co2_lbs'] / 2204 / 0.77)|humanize('intword')|humanize('intcomma') }} acres of forest.</ll>
       </ul>
 
-      These emissions comprise {{ 100*plant.pct_of_country_co2|round(2)}} percent of {{plant.country_long}}'s cumulative CO2 emissions in 2019. 
+      These emissions comprise {{ 100*plant_dict['pct_country_co2']|round(2)}} percent of {{plant_dict['country_long']}}'s cumulative CO2 emissions in 2019. 
       <br><br>
     </div>
   </div>
@@ -42,7 +42,7 @@
 <script>
   // The first parameter are the coordinates of the center of the map
   // The second parameter is the zoom level
-  var map = L.map("map_{{ plant.plant_id_wri }}").setView([{{ plant.latitude }}, {{ plant.longitude }}], 4);
+  var map = L.map("map_{{ plant_dict['plant_id_wri'] }}").setView([{{ plant_dict['latitude'] }}, {{ plant_dict['longitude'] }}], 4);
   
   // {s}, {z}, {x} and {y} are placeholders for map tiles
   // {x} and {y} are the x/y of where you are on the map
@@ -56,7 +56,7 @@
   map.addLayer(layer);
 
   // Add Marker
-  L.marker([{{ plant.latitude }}, {{ plant.longitude }}]).addTo(map).bindPopup("{{ plant.plant_id_wri }}");
+  L.marker([{{ plant_dict['latitude'] }}, {{ plant_dict['longitude'] }}]).addTo(map).bindPopup("{{ plant_dict['plant_id_wri'] }}");
 
   // Disable map control
   map.touchZoom.disable();

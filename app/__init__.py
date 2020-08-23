@@ -16,18 +16,17 @@ def create_app(config_class=Config):
     app = Flask(__name__)
     app.config.from_object(config_class)
 
+    # --- push app context ---
+    app.app_context().push()
+
     # --- register extensions ---
     humanize.init_app(app)
     bootstrap.init_app(app)
     db.init_app(app)
-    # db.reflect(app=app)
     
     # --- register blueprints ---
     from app.main import bp as main_bp
     app.register_blueprint(main_bp)
-
-    from app.dashboard import create_dashboard
-    app = create_dashboard(app)
 
     # --- logging ---
     if not app.debug and not app.testing:

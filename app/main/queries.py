@@ -36,8 +36,7 @@ def list_countries():
 def create_plant_map(emission):
     """Create bubble map of worlds power plants by emission source."""
 
-    emission_col = f"cum_{emission}"
-    emission_label = f"Cumulative {emission.upper()} Tons"
+    emission_label = f"Cumulative {emission.replace('_lbs','').upper()} Tons"
 
     query = f"""
             SELECT 
@@ -45,11 +44,11 @@ def create_plant_map(emission):
                 country,
                 longitude,
                 latitude,
-                {emission_col},
+                cum_{emission},
                 capacity_mw,
                 primary_fuel
             FROM {Config.SCHEMA}.plant
-            ORDER BY {emission_col} DESC
+            ORDER BY cum_{emission} DESC
             """
 
     # --- Read data from SQL ---
@@ -57,13 +56,13 @@ def create_plant_map(emission):
 
     # --- Downcast ---
     map_df['capacity_mw'] = map_df['capacity_mw'].astype(int)
-    map_df[emission_col] /= 2000
-    map_df[emission_col] = map_df[emission_col].astype(int)
+    map_df[f"cum_{emission}"] /= 2000
+    map_df[f"cum_{emission}"] = map_df[f"cum_{emission}"].astype(int)
 
     # --- Rename Columns ---
     map_df.rename({'primary_fuel':'Primary Fuel',
                    'capacity_mw':'Capacity MW',
-                    emission_col:emission_label,
+                    f"cum_{emission}":emission_label,
                     'plant_id_wri':'Plant ID',
                     "longitude":"Longitude",
                     "latitude":'Latitude',
@@ -90,25 +89,25 @@ def create_country_table(emission):
     query = f"""
             SELECT
                 country_long,
-                cum_co2,
-                cum_nox,
-                cum_so2,
+                cum_co2_lbs,
+                cum_nox_lbs,
+                cum_so2_lbs,
                 n_plants
             FROM {Config.SCHEMA}.country
-            ORDER BY cum_co2 DESC
+            ORDER BY cum_co2_lbs DESC
             """
 
     table_df = pd.read_sql(query, db.engine)
 
     # --- unit conversion ---
-    table_df['cum_co2'] /= 2000000000
-    table_df['cum_so2'] /= 1000000
-    table_df['cum_nox'] /= 1000000
+    table_df['cum_co2_lbs'] /= 2000000000
+    table_df['cum_so2_lbs'] /= 1000000
+    table_df['cum_nox_lbs'] /= 1000000
 
     # --- downcasting ---
-    table_df['cum_co2'] = table_df['cum_co2'].astype(int)
-    table_df['cum_so2'] = table_df['cum_so2'].astype(int)
-    table_df['cum_nox'] = table_df['cum_nox'].astype(int)
+    table_df['cum_co2_lbs'] = table_df['cum_co2_lbs'].astype(int)
+    table_df['cum_so2_lbs'] = table_df['cum_so2_lbs'].astype(int)
+    table_df['cum_nox_lbs'] = table_df['cum_nox_lbs'].astype(int)
 
     table_df.columns = ['Country', 'CO2 Mil. Tons', 'SO2 Mil. lbs', 'NOX Mil. lbs', 'Number of Plants in Country']
 
@@ -122,11 +121,9 @@ def query_dirtiest_plants(emission, country_long, n=10):
                 WITH dirtiest_plants AS(
                     SELECT
                         plant_id_wri,
-                        pct_country_co2,
-                        pct_country_so2,
-                        pct_country_nox
+                        pct_country_co2
                     FROM {Config.SCHEMA}.dirtiest
-                    ORDER BY cum_co2 DESC
+                    ORDER BY cum_co2_lbs DESC
                     LIMIT {n}
                 )
 
@@ -134,6 +131,7 @@ def query_dirtiest_plants(emission, country_long, n=10):
                 FROM dirtiest_plants as dp
                 LEFT JOIN {Config.SCHEMA}.plant p
                     ON p.plant_id_wri = dp.plant_id_wri
+                ORDER BY p.cum_co2_lbs DESC
                 """
     
     else:
@@ -142,12 +140,10 @@ def query_dirtiest_plants(emission, country_long, n=10):
                 WITH dirtiest_plants AS(
                     SELECT
                         plant_id_wri,
-                        pct_country_co2,
-                        pct_country_so2,
-                        pct_country_nox
+                        pct_country_co2
                     FROM {Config.SCHEMA}.dirtiest
-                    WHERE country_long = {country_long}
-                    ORDER BY cum_co2 DESC
+                    WHERE country_long = '{country_long}'
+                    ORDER BY cum_co2_lbs DESC
                     LIMIT {n}
                 )
 
@@ -155,6 +151,7 @@ def query_dirtiest_plants(emission, country_long, n=10):
                 FROM dirtiest_plants as dp
                 LEFT JOIN {Config.SCHEMA}.plant p
                     ON p.plant_id_wri = dp.plant_id_wri
+                ORDER BY p.cum_co2_lbs DESC
                 """
     
     df = pd.read_sql(query, db.engine)
@@ -163,21 +160,44 @@ def query_dirtiest_plants(emission, country_long, n=10):
 def spline_dirtiest_plants(switches):
 
     # --- query sql ---
-    query = f"""
-            SELECT
-                a.plant_id_wri,
-                a.country_long, 
-                c.primary_fuel,
-                b.datetime_utc,
-                b.pred_{switches['emission']} as {switches['emission']}
-            FROM {Config.SCHEMA}.dirtiest a
-            LEFT JOIN {Config.SCHEMA}.predictions b
-                ON a.plant_id_wri = b.plant_id_wri
-            LEFT JOIN {Config.SCHEMA}.plant c
-                ON a.plant_id_wri = c.plant_id_wri
-            WHERE a.country_long = '{switches['country_long']}'
-                AND a.co2_rank < 10
-            """
+    if switches['country_long'] == 'World':
+        query = f"""
+
+        WITH dirtiest_world AS (
+            SELECT *
+            FROM {Config.SCHEMA}.plant
+            ORDER BY cum_{switches['emission']} DESC
+            LIMIT 10
+        )
+
+        SELECT
+            dw.plant_id_wri,
+            dw.country_long, 
+            dw.primary_fuel,
+            p.datetime_utc,
+            p.pred_{switches['emission']} as {switches['emission']}
+        FROM dirtiest_world dw
+        LEFT JOIN {Config.SCHEMA}.predictions p
+            ON p.plant_id_wri = dw.plant_id_wri
+        ORDER BY p.datetime_utc
+        """
+    else:
+        query = f"""
+                SELECT
+                    a.plant_id_wri,
+                    a.country_long, 
+                    c.primary_fuel,
+                    b.datetime_utc,
+                    b.pred_{switches['emission']} as {switches['emission']}
+                FROM {Config.SCHEMA}.dirtiest a
+                LEFT JOIN {Config.SCHEMA}.predictions b
+                    ON a.plant_id_wri = b.plant_id_wri
+                LEFT JOIN {Config.SCHEMA}.plant c
+                    ON a.plant_id_wri = c.plant_id_wri
+                WHERE a.country_long = '{switches['country_long']}'
+                    AND a.co2_rank < 10
+                ORDER BY b.datetime_utc
+                """
     df = pd.read_sql(query, db.engine)
 
     # -- set datetime ---
@@ -185,28 +205,47 @@ def spline_dirtiest_plants(switches):
 
     fig = px.line(df, x="datetime_utc", y=switches['emission'], render_mode='svg',
                 color='primary_fuel', line_group='plant_id_wri', color_discrete_map=primary_fuel_cmap,
-                title=f"{switches['emission_label']} Emissions for 10 Dirtiest Plants in the {switches['country_long']}")
+                title=f"Weekly {switches['emission_label']} Emissions for 10 Dirtiest Plants in the {switches['country_long']}")
     
     fig.update_traces(mode='lines', line_shape='spline', opacity=0.5)
     fig.update_layout(xaxis_title='Date', yaxis_title=switches['emission_label'])
     return fig.to_json()
 
 def bubble_plant_capacity(switches):
-
-    # --- query sql ---
-    query = f"""
-            SELECT
-                a.plant_id_wri,
-                b.country_long, 
-                b.primary_fuel,
-                SUM(a.pred_{switches['emission']}) as {switches['emission']},
-                SUM(b.capacity_mw) as capacity_mw
-            FROM {Config.SCHEMA}.predictions a
-            LEFT JOIN {Config.SCHEMA}.plant b
-                ON a.plant_id_wri = b.plant_id_wri
-            WHERE b.country_long = '{switches['country_long']}'
-            GROUP BY a.plant_id_wri
-            """
+    
+    if switches['country_long'] == 'World':
+        # --- query sql ---
+        query = f"""
+                SELECT
+                    a.plant_id_wri,
+                    b.country_long, 
+                    b.primary_fuel,
+                    SUM(a.pred_{switches['emission']}) as {switches['emission']},
+                    SUM(b.capacity_mw) as capacity_mw
+                FROM {Config.SCHEMA}.predictions a
+                LEFT JOIN {Config.SCHEMA}.plant b
+                    ON a.plant_id_wri = b.plant_id_wri
+                GROUP BY a.plant_id_wri, b.country_long, b.primary_fuel
+                ORDER BY SUM(a.pred_{switches['emission']}) DESC
+                LIMIT 50
+                """
+    else:
+        # --- query sql ---
+        query = f"""
+                SELECT
+                    a.plant_id_wri,
+                    b.country_long, 
+                    b.primary_fuel,
+                    SUM(a.pred_{switches['emission']}) as {switches['emission']},
+                    SUM(b.capacity_mw) as capacity_mw
+                FROM {Config.SCHEMA}.predictions a
+                LEFT JOIN {Config.SCHEMA}.plant b
+                    ON a.plant_id_wri = b.plant_id_wri
+                WHERE b.country_long = '{switches['country_long']}'
+                GROUP BY a.plant_id_wri, b.country_long, b.primary_fuel
+                ORDER BY SUM(a.pred_{switches['emission']}) DESC
+                LIMIT 50
+                """
     df = pd.read_sql(query, db.engine)
 
     fig = px.scatter(df, x='capacity_mw', y=switches['emission'],
