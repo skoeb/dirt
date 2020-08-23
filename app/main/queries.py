@@ -3,8 +3,10 @@ import plotly.graph_objs as go
 
 from flask import jsonify
 
-from models import Plant, Country, Predictions, Dirtiest
+# from models import Plant, Country, Predictions, Dirtiest
+from flask import current_app, url_for
 from app import db
+from config import Config
 
 import pandas as pd
 import numpy as np
@@ -20,40 +22,38 @@ primary_fuel_cmap={
         "Petcoke": '#AB63FA'
 }
 
-def create_map(emission):
+def list_countries():
+    query = f"""
+            SELECT DISTINCT country_long
+            FROM {Config.SCHEMA}.country
+            """
+    df = pd.read_sql(query, db.engine)
+
+    countries = list(df['country_long'])
+    countries.insert(0,'World')
+    return countries
+
+def create_plant_map(emission):
     """Create bubble map of worlds power plants by emission source."""
 
-    if emission == 'co2':
-        query = db.session.query(Plant.plant_id_wri,
-                                Plant.country,
-                                Plant.longitude, Plant.latitude,
-                                Plant.cum_co2,
-                                Plant.capacity_mw,
-                                Plant.primary_fuel)\
-                            .order_by(db.desc(Plant.cum_co2))
-    elif emission == 'so2':
-        query = db.session.query(Plant.plant_id_wri,
-                                Plant.country,
-                                Plant.longitude, Plant.latitude,
-                                Plant.cum_so2,
-                                Plant.capacity_mw,
-                                Plant.primary_fuel)\
-                            .order_by(db.desc(Plant.cum_so2))
-    if emission == 'nox':
-        query = db.session.query(Plant.plant_id_wri,
-                                Plant.country,
-                                Plant.longitude, Plant.latitude,
-                                Plant.cum_nox,
-                                Plant.capacity_mw,
-                                Plant.primary_fuel)\
-                            .order_by(db.desc(Plant.cum_nox))
-
-    # --- Create labels of selection from jQuery ---
     emission_col = f"cum_{emission}"
     emission_label = f"Cumulative {emission.upper()} Tons"
 
+    query = f"""
+            SELECT 
+                plant_id_wri,
+                country,
+                longitude,
+                latitude,
+                {emission_col},
+                capacity_mw,
+                primary_fuel
+            FROM {Config.SCHEMA}.plant
+            ORDER BY {emission_col} DESC
+            """
+
     # --- Read data from SQL ---
-    map_df = pd.read_sql(query.statement, db.engine)
+    map_df = pd.read_sql(query, db.engine)
 
     # --- Downcast ---
     map_df['capacity_mw'] = map_df['capacity_mw'].astype(int)
@@ -84,17 +84,21 @@ def create_map(emission):
 
     return graphJSON
 
-def create_table(emission):
+def create_country_table(emission):
     """Create table of countries by emission."""
 
-    query = db.session.query(Country.country_long,
-                        Country.cum_co2,
-                        Country.cum_nox,
-                        Country.cum_so2,
-                        Country.n_plants)\
-                    .order_by(db.desc(Country.cum_co2))\
+    query = f"""
+            SELECT
+                country_long,
+                cum_co2,
+                cum_nox,
+                cum_so2,
+                n_plants
+            FROM {Config.SCHEMA}.country
+            ORDER BY cum_co2 DESC
+            """
 
-    table_df = pd.read_sql(query.statement, db.engine)
+    table_df = pd.read_sql(query, db.engine)
 
     # --- unit conversion ---
     table_df['cum_co2'] /= 2000000000
@@ -110,29 +114,51 @@ def create_table(emission):
 
     return table_df.sort_values('CO2 Mil. Tons', ascending=False)
 
-def create_plant_text(emission, country_long, n=10):
+def query_dirtiest_plants(emission, country_long, n=10):
 
-    output = []
     if country_long == 'World':
         # --- grab country objects ---
-        query = db.session.query(Plant.plant_id_wri)\
-                                .order_by(db.desc(Plant.cum_co2))\
-                                .limit(n)
+        query = f"""
+                WITH dirtiest_plants AS(
+                    SELECT
+                        plant_id_wri,
+                        pct_country_co2,
+                        pct_country_so2,
+                        pct_country_nox
+                    FROM {Config.SCHEMA}.dirtiest
+                    ORDER BY cum_co2 DESC
+                    LIMIT {n}
+                )
+
+                SELECT *
+                FROM dirtiest_plants as dp
+                LEFT JOIN {Config.SCHEMA}.plant p
+                    ON p.plant_id_wri = dp.plant_id_wri
+                """
     
     else:
         # --- grab country objects ---
-        query = db.session.query(Dirtiest.plant_id_wri)\
-                                .order_by(Dirtiest.co2_rank)\
-                                .filter(Dirtiest.country_long == country_long)\
-                                .limit(n)
+        query = f"""
+                WITH dirtiest_plants AS(
+                    SELECT
+                        plant_id_wri,
+                        pct_country_co2,
+                        pct_country_so2,
+                        pct_country_nox
+                    FROM {Config.SCHEMA}.dirtiest
+                    WHERE country_long = {country_long}
+                    ORDER BY cum_co2 DESC
+                    LIMIT {n}
+                )
 
-    dirtiest_plants = [i[0] for i in query]
-    for index, plant_id in enumerate(dirtiest_plants):
-        plant_results = db.session.query(Plant).filter(Plant.plant_id_wri == plant_id)
-        for plant in plant_results:
-            output.append(plant)
-
-    return output
+                SELECT *
+                FROM dirtiest_plants as dp
+                LEFT JOIN {Config.SCHEMA}.plant p
+                    ON p.plant_id_wri = dp.plant_id_wri
+                """
+    
+    df = pd.read_sql(query, db.engine)
+    return df
 
 def spline_dirtiest_plants(switches):
 
@@ -144,10 +170,10 @@ def spline_dirtiest_plants(switches):
                 c.primary_fuel,
                 b.datetime_utc,
                 b.pred_{switches['emission']} as {switches['emission']}
-            FROM {config.SCHEMA}.dirtiest a
-            LEFT JOIN {config.SCHEMA}.predictions b
+            FROM {Config.SCHEMA}.dirtiest a
+            LEFT JOIN {Config.SCHEMA}.predictions b
                 ON a.plant_id_wri = b.plant_id_wri
-            LEFT JOIN {config.SCHEMA}.plant c
+            LEFT JOIN {Config.SCHEMA}.plant c
                 ON a.plant_id_wri = c.plant_id_wri
             WHERE a.country_long = '{switches['country_long']}'
                 AND a.co2_rank < 10
@@ -175,8 +201,8 @@ def bubble_plant_capacity(switches):
                 b.primary_fuel,
                 SUM(a.pred_{switches['emission']}) as {switches['emission']},
                 SUM(b.capacity_mw) as capacity_mw
-            FROM {config.SCHEMA}.predictions a
-            LEFT JOIN {config.SCHEMA}.plant b
+            FROM {Config.SCHEMA}.predictions a
+            LEFT JOIN {Config.SCHEMA}.plant b
                 ON a.plant_id_wri = b.plant_id_wri
             WHERE b.country_long = '{switches['country_long']}'
             GROUP BY a.plant_id_wri

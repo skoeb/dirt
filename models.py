@@ -1,12 +1,20 @@
 from flask import current_app, url_for
 from sqlalchemy.ext.hybrid import hybrid_property, hybrid_method
 from sqlalchemy.ext.automap import automap_base
-from sqlalchemy import create_engine
+from sqlalchemy import create_engine, Table
 from app import db
 
+from config import Config
+
+# db.Model.metadata.schema = Config.SCHEMA
+
 class Country(db.Model):
-    __table__ = db.Model.metadata.tables['country']
-    __mapper_args__ = {'primary_key': [__table__.c.country]} 
+    # __mapper_args__ = {'primary_key': [__table__.c.country]} 
+
+    print('SCHEMA', db.Model.metadata.schema)
+    print('TABLES', db.Model.metadata.tables.keys())
+    breakpoint()
+    __table__ = db.Model.metadata.tables['production.country']
 
 class Plant(db.Model):
     __table__ = db.Model.metadata.tables['plant']
