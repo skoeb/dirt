@@ -2,7 +2,6 @@ from app.main import bp
 from app.main import queries
 from app import db
 from flask import Flask, render_template, redirect, request, jsonify
-from app.main.forms import EmissionForm
 
 # --- get list of countries ---
 countries = queries.list_countries()
@@ -97,6 +96,4 @@ def methodology():
 @bp.route('/contact')
 def contact():
     return render_template('contact.html')
-
-
 

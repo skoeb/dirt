@@ -2,76 +2,77 @@
 
 {% block app_content %}
 
+
 <div class="container">
 
-    <!-- Emission Selector -->
-    <div class="row mt-4 form-group">
-        <label for="emisison-select"><b>Emission Source to Plot</b></label>
-        <select id="emission-select" class="form-control">
-            <option value="co2_lbs">Carbon Dioxide (CO2)</option>
-            <option value="nox_lbs">Nitrogen Oxides (NOx)</option>
-            <option value="so2_lbs">Sulfur Dioxide (SO2)</option>
-        </select>
-    </div>
+	<!-- Emission Selector -->
+	<div class="row mt-4 form-group">
+		<label for="emisison-select"><b>Emission Source to Plot</b></label>
+		<select id="emission-select" class="form-control">
+			<option value="co2_lbs">Carbon Dioxide (CO2)</option>
+			<option value="nox_lbs">Nitrogen Oxides (NOx)</option>
+			<option value="so2_lbs">Sulfur Dioxide (SO2)</option>
+		</select>
+	</div>
 
-    <!-- Country Selector -->
-    <div class="row form-group">
-        <label for="country-select"><b>Query Dirtiest Power Plants In:</b></label>
-        <select id="country-select" class="form-control">
-            {% for country in countries %}
-                <option>{{ country }}</option>
-            {% endfor %}
-        </select>
-    </div>
+	<!-- Country Selector -->
+	<div class="row form-group">
+		<label for="country-select"><b>Query Dirtiest Power Plants In:</b></label>
+		<select id="country-select" class="form-control">
+			{% for country in countries %}
+				<option>{{ country }}</option>
+			{% endfor %}
+		</select>
+	</div>
 
 
-    <!-- Dirtiest Spline -->
-    <div class="row" id="dirtiest-spline">
-        <script>
-            var graphs = {{dirtiest_spline | safe}};
-            Plotly.newPlot('dirtiest-spline', graphs, {});
-        </script>
-    </div>
+	<!-- Dirtiest Spline -->
+	<div class="row" id="dirtiest-spline">
+		<script>
+			var graphs = {{dirtiest_spline | safe}};
+			Plotly.newPlot('dirtiest-spline', graphs, {});
+		</script>
+	</div>
 
-    <!-- Plant Bubble -->
-    <div class="row" id="plant-bubble">
-        <script>
-            var graphs = {{plant_bubble | safe}};
-            Plotly.newPlot('plant-bubble', graphs, {});
-        </script>
-    </div>
+	<!-- Plant Bubble -->
+	<div class="row" id="plant-bubble">
+		<script>
+			var graphs = {{plant_bubble | safe}};
+			Plotly.newPlot('plant-bubble', graphs, {});
+		</script>
+	</div>
 
 </div>
 
 <!-- jQuery -->
 <script type="text/javascript">
-    
-    var urls = [{{ url_for("main.dirtiest_spline_update")|tojson|safe }},
-                {{ url_for("main.plant_bubble_update")|tojson|safe }}];
-    
-    var plots = ['dirtiest-spline', 'plant-bubble']
-    
-    var zipped = urls.map(function(e, i) {
-        return [e, plots[i]];
-    });
+	
+	var urls = [{{ url_for("main.dirtiest_spline_update")|tojson|safe }},
+				{{ url_for("main.plant_bubble_update")|tojson|safe }}];
+	
+	var plots = ['dirtiest-spline', 'plant-bubble']
+	
+	var zipped = urls.map(function(e, i) {
+		return [e, plots[i]];
+	});
 
-    $('#emission-select,#country-select').on('change', function(){
-        $.each(zipped, function(i, u){ 
-            $.ajax({
-                url: u[0],
-                type: "GET",
-                contentType: 'application/json;charset=UTF-8',
-                data: {
-                    'emission': document.getElementById('emission-select').value,
-                    'country_long': document.getElementById('country-select').value
-                },
-                dataType: "json",
-                success: function (data) {
-                    Plotly.react(u[1], data);
-                }
-            });
-        })
-    })
+	$('#emission-select,#country-select').on('change', function(){
+		$.each(zipped, function(i, u){ 
+			$.ajax({
+				url: u[0],
+				type: "GET",
+				contentType: 'application/json;charset=UTF-8',
+				data: {
+					'emission': document.getElementById('emission-select').value,
+					'country_long': document.getElementById('country-select').value
+				},
+				dataType: "json",
+				success: function (data) {
+					Plotly.react(u[1], data);
+				}
+			});
+		})
+	})
 </script>
 
 {% endblock %}
