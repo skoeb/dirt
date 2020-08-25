@@ -1,18 +1,9 @@
-import plotly
-import plotly.graph_objs as go
-
-from flask import jsonify
-
-# from models import Plant, Country, Predictions, Dirtiest
-from flask import current_app, url_for
 from app import db
 from config import Config
 
+from flask import current_app, url_for, jsonify
 import pandas as pd
-import numpy as np
-import plotly
 import plotly.express as px
-import json
 from datetime import datetime as dt
 
 primary_fuel_cmap={

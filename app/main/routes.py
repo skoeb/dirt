@@ -1,6 +1,7 @@
 from app.main import bp
 from app.main import queries
 from app import db
+
 from flask import Flask, render_template, redirect, request, jsonify
 
 # --- get list of countries ---
