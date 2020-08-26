@@ -19,8 +19,8 @@
     </div>
     <div class="col-9">
       {{ plant_dict['name']|title }} is the {{ loop.index|humanize('ordinal')|humanize('intcomma')}} dirtiest plant for the selected country.
-      Based on our modelling estimates, it produced {{ (plant_dict['cum_co2_lbs']/2000)|humanize('intword')|humanize('intcomma')}} tons of CO2 in 2019,
-      along with {{ plant_dict['cum_nox_lbs']|humanize('intword')}} lbs of NOx emissions and {{ plant_dict['cum_so2_lbs']|humanize('intword')|humanize('intcomma') }} lbs of SO2 emissions.
+      Based on our modelling estimates, it produced {{ (plant_dict['cum_co2_lbs']/2000)|humanize('intword')|humanize('intcomma')}} tons of CO<sub>2</sub> in 2019,
+      along with {{ plant_dict['cum_nox_lbs']|humanize('intword')}} lbs of NO<sub>X</sub> emissions and {{ plant_dict['cum_so2_lbs']|humanize('intword')|humanize('intcomma') }} lbs of SO<sub>2</sub> emissions.
       
       <br><br>
       The 2019 emissions from this plant were equivelant to:
@@ -31,7 +31,7 @@
         <li>the emissions sequested by {{ (plant_dict['cum_co2_lbs'] / 2204 / 0.77)|humanize('intword')|humanize('intcomma') }} acres of forest.</ll>
       </ul>
 
-      These emissions comprise {{ 100*plant_dict['pct_country_co2']|round(2)}} percent of {{plant_dict['country_long']}}'s cumulative CO2 emissions in 2019. 
+      These emissions comprise {{ 100*plant_dict['pct_country_co2']|round(2)}} percent of {{plant_dict['country_long']}}'s cumulative CO<sub>2</sub> emissions in 2019. 
       <br><br>
     </div>
   </div>

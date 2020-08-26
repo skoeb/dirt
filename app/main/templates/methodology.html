@@ -9,7 +9,7 @@
         <div class="card-img-overlay d-flex flex-column justify-content-end my-4">
             <h1 class="card-title bold">How much is that power plant really emitting?</h1>
             <p class="card-text">
-            Using advanced satellite imagery and machine learning techniques, our model attributes daily emissions of CO2, NOX, and SO2 to specific powerplants.
+            Using advanced satellite imagery and machine learning techniques, our model attributes daily emissions of CO<sub>2</sub>, NO<sub>X</sub>, and SO<sub>2</sub> to specific powerplants.
             Imagine being able to audit emissions in real-time, for every power plant in the world. 
             </p>
         </div>
@@ -73,7 +73,7 @@
         <p>
         Tycho constructs a training data set using known power plant attributes and emissions from within the United States.
         These data sources include the Environmental Protection Agency's Continuous Emission Monitoring System (EPA CEMS) and the Energy Information
-        Administration's Form 860 (EIA 860). EPA CEMS requires some U.S. power plants to report hourly CO2, SO2, and NOX emissions at the generator level. 
+        Administration's Form 860 (EIA 860). EPA CEMS requires some U.S. power plants to report hourly CO<sub>2</sub>, SO<sub>2</sub>, and NO<sub>X</sub> emissions at the generator level. 
         These are aggregated at the plant level by day to understand the cumulative known emissions. This data is combined with attributes from EIA 860, which
         includes annual information on plant capacity, primary fuel, latitude and longitude, and utilization. Additional data is loaded for each day including the
         locations historical daily weather (including attributes such as average daily wind direction and speed).
@@ -106,7 +106,7 @@
     <div class="text-justify row mb-4">
         <p>
         Using the training set of known historical emissions outlined in step 1, and the synthesized remote sensing images described in step 2, we are able to train a machine learning model to estimate
-        emissions from specific plants. Four models are separately trained to predict the daily <b>Gross Load (MW)</b>, <b>CO2</b>, <b>SO2</b>, and <b>NOX</b> emissions. Models are trained using known
+        emissions from specific plants. Four models are separately trained to predict the daily <b>Gross Load (MW)</b>, <b>CO<sub>2</sub></b>, <b>SO<sub>2</sub></b>, and <b>NO<sub>X</sub></b> emissions. Models are trained using known
         data from U.S. power plants from the EPA CEMS. The current models used are <a href=https://xgboost.readthedocs.io/en/latest/>XGBoost</a> models with hyper-parameters
         tuned using a Bayesian Optimization approach. 
         A holdout set of U.S. power plants are used to evaluate model performance. Once the model is trained, it is used to predict power plant emissions for the
