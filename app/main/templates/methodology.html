@@ -3,10 +3,17 @@
 {% block app_content %}
 <div class="container my-4">
 
-    <figure class="figure">
-        <img src=" {{url_for('static', filename='jumbotron_emissions_CO_cropped.png') }}" class="figure-img img-fluid rounded" >
-        <figcaption class="figure-caption">Average daily CO emissions processed by Tycho from Sentinel-5P data.</figcaption>
-    </figure>
+    <div class="card bg-dark text-white my-4">
+        <img src=" {{url_for('static', filename='jumbotron_emissions_CO_cropped.png') }}" class="card-img">
+        <figcaption class="figure-caption">Mosaic of average daily CO emissions in 2019 processed by Tycho from Sentinel-5P data.</figcaption>
+        <div class="card-img-overlay d-flex flex-column justify-content-end my-4">
+            <h1 class="card-title bold">How much is that power plant really emitting?</h1>
+            <p class="card-text">
+            Using advanced satellite imagery and machine learning techniques, our model attributes daily emissions of CO2, NOX, and SO2 to specific powerplants.
+            Imagine being able to audit emissions in real-time, for every power plant in the world. 
+            </p>
+        </div>
+    </div>
 
     <div class="lead text-justify row mb-4">
         <p>
