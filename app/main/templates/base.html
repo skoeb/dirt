@@ -1,6 +1,18 @@
 
 <head>
 
+	<!-- Global site tag (gtag.js) - Google Analytics -->
+	<script async src="https://www.googletagmanager.com/gtag/js?id=UA-176432953-1"></script>
+	<script>
+	window.dataLayer = window.dataLayer || [];
+	function gtag(){dataLayer.push(arguments);}
+	gtag('js', new Date());
+
+	gtag('config', 'UA-176432953-1');
+	</script>
+
+	<meta name="viewport" content="width=device-width, initial-scale=1">
+
 	<!-- static -->
 	<link rel= "stylesheet" type= "text/css" href= "{{ url_for('static',filename='styles/navbar.css') }}">
 
@@ -61,7 +73,7 @@
 <div class="container">
 	<hr />
 
-	<div class="card">
+	<div class="card mb-4">
 				
 		<div class="card-header">        
 			Consider signing up for our email list
@@ -71,7 +83,7 @@
 			<div class="card-text">
 				<p><small>
 					<a href=https://github.com/skoeb/tycho>Tycho</a>, the model used by <i>Dirtiest Power Plants</i> is still underdevelopment and predictions may change retroactively as model accuracy improves.
-					Sign up here to receive updates (around two per year) when significant updates are released. We won't bug you unless we have cool new features to share. 
+					Sign up here to receive updates (around two per year) when significant updates are released. We won't bug you unless we have cool new features to share.
 				</p></small>
 			</div>
 
@@ -91,6 +103,13 @@
 				</form>
 			</div>
 			<!--End mc_embed_signup-->
+
+			<div class="card-text">
+				<p><small>
+					Please reach out to us at <a href = "mailto: dirtiestpowerplants@gmail.com">dirtiestpowerplants@gmail.com</a> with any questions, comments, or potential use cases for <i>Tycho</i> or <i>Dirtiest Power Plants</i>.
+				</p></small>
+			</div>
+
 
 		</div>
 	</div>
