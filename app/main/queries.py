@@ -248,7 +248,6 @@ def bubble_plant_capacity(switches):
     return fig.to_json()
 
 def bubble_mwh_load(switches):
-    switches['emission_label'] = f"Mean {switches['emission'].replace('_lbs','').upper()} Emissions lbs/MWh"
 
     if switches['country_long'] == 'World':
         query = f"""
@@ -293,7 +292,7 @@ def bubble_mwh_load(switches):
                     title="Which Plants Have the Highest Emissions per MWh",
                     marginal_x='histogram', marginal_y='histogram', color_discrete_map=primary_fuel_cmap)
 
-    fig.update_layout(xaxis_title='Plant Cumulative Load (MWh)', yaxis_title=switches['emission_label'])
+    fig.update_layout(xaxis_title='Plant Cumulative Load (MWh)', yaxis_title=f"Mean {switches['emission'].replace('_lbs','').upper()} Emissions lbs/MWh")
     fig.update_layout(showlegend=False)
 
     return fig.to_json()
@@ -324,7 +323,7 @@ def fuel_pie_chart(switches):
     df.columns = ['Primary Fuel', f"{switches['emission_label']}"]
 
     fig = px.pie(df, values=f"{switches['emission_label']}", names='Primary Fuel', color_discrete_map=primary_fuel_cmap,
-                title=f"{switches['country_long']} Power Sector {switches['emission_label']} by Fuel")
+                title=f"{switches['country_long']} Power Sector {switches['emission'].replace('_lbs', '').upper()} by Fuel")
     fig.update_traces(textposition='inside', textinfo='percent+label')
 
     return fig.to_json()
