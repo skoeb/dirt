@@ -24,8 +24,9 @@
 			{% endfor %}
 		</select>
 	</div>
+</div>
 
-
+<div class="container">
 	<!-- Dirtiest Spline -->
 	<div class="row" id="dirtiest-spline">
 		<script>
@@ -34,23 +35,55 @@
 		</script>
 	</div>
 
+	<!-- Emissions by Fuel Source -->
+	<div class="row">
+		<div class="col-md-6" id="fuel-pie-chart">
+			<div class="container">
+				<script>
+					var graphs = {{fuel_pie_chart | safe}};
+					Plotly.newPlot('fuel-pie-chart', graphs, {});
+				</script>
+			</div>
+		</div>
+
+		<div class="col-md-6" id="country-pie-chart">
+			<div class="container">
+				<script>
+					var graphs = {{country_pie_chart | safe}};
+					Plotly.newPlot('country-pie-chart', graphs, {});
+				</script>
+			</div>
+		</div>
+	</div>
+
 	<!-- Plant Bubble -->
 	<div class="row" id="plant-bubble">
 		<script>
 			var graphs = {{plant_bubble | safe}};
-			Plotly.newPlot('plant-bubble', graphs, {});
+			Plotly.newPlot('plant-bubble', graphs, {autosize: true});
 		</script>
 	</div>
-
+		
+	<!-- MWh Load -->
+	<div class="row" id="mwh-load-bubble">
+		<script>
+			var graphs = {{mwh_load_bubble | safe}};
+			Plotly.newPlot('mwh-load-bubble', graphs, {autosize: true});
+		</script>
+	</div>
 </div>
 
 <!-- jQuery -->
 <script type="text/javascript">
 	
 	var urls = [{{ url_for("main.dirtiest_spline_update")|tojson|safe }},
-				{{ url_for("main.plant_bubble_update")|tojson|safe }}];
+				{{ url_for("main.plant_bubble_update")|tojson|safe }},
+				{{ url_for("main.mwh_load_bubble_update")|tojson|safe }},
+				{{ url_for("main.fuel_pie_chart_update")|tojson|safe }},
+				{{ url_for("main.country_pie_chart_update")|tojson|safe }},
+				];
 	
-	var plots = ['dirtiest-spline', 'plant-bubble']
+	var plots = ['dirtiest-spline', 'plant-bubble', 'mwh-load-bubble', 'fuel-pie-chart', 'country-pie-chart']
 	
 	var zipped = urls.map(function(e, i) {
 		return [e, plots[i]];

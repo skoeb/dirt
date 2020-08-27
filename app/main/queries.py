@@ -21,6 +21,7 @@ def list_countries():
     df = pd.read_sql(query, db.engine)
 
     countries = list(df['country_long'])
+    countries.sort()
     countries.insert(0,'World')
     return countries
 
@@ -196,53 +197,153 @@ def spline_dirtiest_plants(switches):
 
     fig = px.line(df, x="datetime_utc", y=switches['emission'], render_mode='svg',
                 color='primary_fuel', line_group='plant_id_wri', color_discrete_map=primary_fuel_cmap,
-                title=f"Weekly {switches['emission_label']} Emissions for 10 Dirtiest Plants in the {switches['country_long']}")
+                title=f"When {switches['emission_label']} is Emitted by the Ten Dirtiest Plants")
     
     fig.update_traces(mode='lines', line_shape='spline', opacity=0.5)
     fig.update_layout(xaxis_title='Date', yaxis_title=switches['emission_label'])
     return fig.to_json()
 
 def bubble_plant_capacity(switches):
-    
+
+    switches['emission_label'] = f"{switches['emission'].replace('_lbs','').upper()} Cumulative Emissions (lbs)"
+
     if switches['country_long'] == 'World':
-        # --- query sql ---
         query = f"""
                 SELECT
                     a.plant_id_wri,
-                    b.country_long, 
-                    b.primary_fuel,
-                    SUM(a.pred_{switches['emission']}) as {switches['emission']},
-                    SUM(b.capacity_mw) as capacity_mw
-                FROM {Config.SCHEMA}.predictions a
-                LEFT JOIN {Config.SCHEMA}.plant b
-                    ON a.plant_id_wri = b.plant_id_wri
-                GROUP BY a.plant_id_wri, b.country_long, b.primary_fuel
-                ORDER BY SUM(a.pred_{switches['emission']}) DESC
-                LIMIT 50
+                    a.country_long, 
+                    a.primary_fuel,
+                    a.cum_{switches['emission']},
+                    a.capacity_mw
+                FROM {Config.SCHEMA}.plant a
+                ORDER BY a.cum_{switches['emission']} DESC
+                LIMIT 500
                 """
     else:
-        # --- query sql ---
+        query = f"""
+            SELECT
+                a.plant_id_wri,
+                a.country_long, 
+                a.primary_fuel,
+                a.cum_{switches['emission']},
+                a.capacity_mw
+            FROM {Config.SCHEMA}.plant a
+            WHERE a.country_long = '{switches['country_long']}'
+            ORDER BY a.cum_{switches['emission']} DESC
+            LIMIT 500
+            """
+
+    df = pd.read_sql(query, db.engine)
+    df.columns = ['WRI Plant ID', 'Country', 'Primary Fuel', switches['emission_label'], "Plant Capacity MW"]
+
+    fig = px.scatter(df, x="Plant Capacity MW", y=switches['emission_label'],
+                    color='Primary Fuel', size=switches['emission_label'], opacity=0.5,
+                    hover_data=['Country'],
+                    title="Which Plants Have the Highest Cumulative Emissions",
+                    marginal_x='histogram', marginal_y='histogram', color_discrete_map=primary_fuel_cmap)
+
+    fig.update_layout(xaxis_title='Capacity (MW)', yaxis_title=switches['emission_label'])
+    fig.update_layout(showlegend=False)
+
+    return fig.to_json()
+
+def bubble_mwh_load(switches):
+    switches['emission_label'] = f"Mean {switches['emission'].replace('_lbs','').upper()} Emissions lbs/MWh"
+
+    if switches['country_long'] == 'World':
         query = f"""
                 SELECT
                     a.plant_id_wri,
-                    b.country_long, 
-                    b.primary_fuel,
-                    SUM(a.pred_{switches['emission']}) as {switches['emission']},
-                    SUM(b.capacity_mw) as capacity_mw
-                FROM {Config.SCHEMA}.predictions a
-                LEFT JOIN {Config.SCHEMA}.plant b
-                    ON a.plant_id_wri = b.plant_id_wri
-                WHERE b.country_long = '{switches['country_long']}'
-                GROUP BY a.plant_id_wri, b.country_long, b.primary_fuel
-                ORDER BY SUM(a.pred_{switches['emission']}) DESC
-                LIMIT 50
+                    a.country_long, 
+                    a.primary_fuel,
+                    a.{switches['emission']}_per_mwh,
+                    a.cum_load
+                FROM {Config.SCHEMA}.plant a
+                ORDER BY a.cum_{switches['emission']} DESC
+                LIMIT 500
                 """
+    else:
+        query = f"""
+            SELECT
+                a.plant_id_wri,
+                a.country_long, 
+                a.primary_fuel,
+                a.{switches['emission']}_per_mwh,
+                a.cum_load
+            FROM {Config.SCHEMA}.plant a
+            WHERE a.country_long = '{switches['country_long']}'
+            ORDER BY a.cum_{switches['emission']} DESC
+            LIMIT 500
+            """
+
     df = pd.read_sql(query, db.engine)
 
-    fig = px.scatter(df, x='capacity_mw', y=switches['emission'],
-                    color='primary_fuel', size=switches['emission'], opacity=0.5,
-                    marginal_x='histogram', marginal_y='histogram', color_discrete_map=primary_fuel_cmap,
-                    title=f"Sum of Plant Level Capacity against Emissions of {switches['emission_label']}")
+    # --- clean up ---
+    df = df.dropna()
+    if len(df) > 10:
+        percentile = df[f"{switches['emission']}_per_mwh"].quantile(0.94)
+        df = df.loc[df[f"{switches['emission']}_per_mwh"] < percentile]
+    
+    df = df.loc[(df[f"{switches['emission']}_per_mwh"] > 0) & (df["cum_load"] > 0)]
+    df.columns = ['WRI Plant ID', 'Country', 'Primary Fuel', switches['emission_label'], "Plant Cumulative Load (MWh)"]
 
-    fig.update_layout(xaxis_title='Capacity (MW)', yaxis_title=switches['emission_label'])
+    fig = px.scatter(df, x="Plant Cumulative Load (MWh)", y=switches['emission_label'],
+                    color='Primary Fuel', size=switches['emission_label'], opacity=0.5,
+                    hover_data=['Country'],
+                    title="Which Plants Have the Highest Emissions per MWh",
+                    marginal_x='histogram', marginal_y='histogram', color_discrete_map=primary_fuel_cmap)
+
+    fig.update_layout(xaxis_title='Plant Cumulative Load (MWh)', yaxis_title=switches['emission_label'])
+    fig.update_layout(showlegend=False)
+
+    return fig.to_json()
+
+def fuel_pie_chart(switches):
+
+    if switches['country_long'] == 'World':
+        query = f"""
+            SELECT
+                a.primary_fuel,
+                SUM(a.cum_{switches['emission']}) as emission
+            FROM {Config.SCHEMA}.plant a
+            GROUP BY a.primary_fuel
+        """
+    
+    else:
+        query = f"""
+            SELECT
+                a.primary_fuel,
+                SUM(a.cum_{switches['emission']}) as emission
+            FROM {Config.SCHEMA}.plant a
+            WHERE a.country_long = '{switches['country_long']}'
+            GROUP BY a.primary_fuel
+        """
+
+    df = pd.read_sql(query, db.engine)
+
+    df.columns = ['Primary Fuel', f"{switches['emission_label']}"]
+
+    fig = px.pie(df, values=f"{switches['emission_label']}", names='Primary Fuel', color_discrete_map=primary_fuel_cmap,
+                title=f"{switches['country_long']} Power Sector {switches['emission_label']} by Fuel")
+    fig.update_traces(textposition='inside', textinfo='percent+label')
+
+    return fig.to_json()
+
+def country_pie_chart(switches):
+    query = f"""
+    SELECT
+        a.country_long,
+        a.cum_{switches['emission']}
+    FROM {Config.SCHEMA}.country a
+    """
+
+    df = pd.read_sql(query, db.engine)
+
+    df.columns = ['Country', f"{switches['emission_label']}"]
+
+    fig = px.pie(df, values=f"{switches['emission_label']}", names='Country',
+                title=f"Global {switches['emission_label']} by Country")
+    fig.update_traces(textposition='inside', textinfo='percent+label')
+    fig.update_layout(showlegend=False)
+
     return fig.to_json()

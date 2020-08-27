@@ -64,10 +64,16 @@ def explore_the_data():
 
     dirtiest_spline = queries.spline_dirtiest_plants(switches_init)
     plant_bubble = queries.bubble_plant_capacity(switches_init)
+    mwh_load_bubble = queries.bubble_mwh_load(switches_init)
+    fuel_pie_chart = queries.fuel_pie_chart(switches_init)
+    country_pie_chart = queries.country_pie_chart(switches_init)
     return render_template('explore_the_data.html',
                             countries=countries,
                             dirtiest_spline=dirtiest_spline,
-                            plant_bubble=plant_bubble)
+                            plant_bubble=plant_bubble,
+                            mwh_load_bubble=mwh_load_bubble,
+                            fuel_pie_chart=fuel_pie_chart,
+                            country_pie_chart=country_pie_chart)
 
 
 @bp.route('/dirtiest_spline_update', methods=['GET', 'POST'])
@@ -82,6 +88,26 @@ def plant_bubble_update():
     switches = dict(request.args)
     switches['emission_label'] = switches['emission'].replace('_lbs','').upper()
     graphJSON = queries.bubble_plant_capacity(switches)
+    return graphJSON
+
+@bp.route('/mwh_load_bubble_update', methods=['GET', 'POST'])
+def mwh_load_bubble_update():
+    switches = dict(request.args)
+    graphJSON = queries.bubble_mwh_load(switches)
+    return graphJSON
+
+@bp.route('/fuel_pie_chart_update', methods=['GET', 'POST'])
+def fuel_pie_chart_update():
+    switches = dict(request.args)
+    switches['emission_label'] = switches['emission'].replace('_lbs','').upper()
+    graphJSON = queries.fuel_pie_chart(switches)
+    return graphJSON
+
+@bp.route('/country_pie_chart_update', methods=['GET', 'POST'])
+def country_pie_chart_update():
+    switches = dict(request.args)
+    switches['emission_label'] = switches['emission'].replace('_lbs','').upper()
+    graphJSON = queries.country_pie_chart(switches)
     return graphJSON
 
 # ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
