@@ -31,7 +31,7 @@
         <li>the emissions sequested by {{ (plant_dict['cum_co2_lbs'] / 2204 / 0.77)|humanize('intword')|humanize('intcomma') }} acres of forest.</ll>
       </ul>
 
-      These emissions comprise {{ 100*plant_dict['pct_country_co2']|round(2)}} percent of {{plant_dict['country_long']}}'s cumulative CO<sub>2</sub> emissions in 2019. 
+      These emissions comprise {{ (100*plant_dict['pct_country_co2'])|round(3) }} percent of {{plant_dict['country_long']}}'s cumulative CO<sub>2</sub> emissions in 2019. 
       <br><br>
     </div>
   </div>
