@@ -22,7 +22,7 @@
             dirty power plants are likely responsible for a significant proportion of cumulative power sector emissions. With knowledge of where these plants are policy
             makers, activists, and regulators may be better equipped to scrutinize the impact the oversized contribution towards climate change they are causing.
             <i>Dirtiest Power Plants</i> uses new multi-spectral satellite data sources along with a sophisticated machine learning model and robust data
-            sources to provide and independent solution to this problem.
+            sources to provide an independent solution to this problem.
         </p> 
     </div>
 
@@ -44,7 +44,7 @@
         In order to make the predictions available to explore on the <a href={{ url_for('main.plant_rankings') }}>Plant Rankings</a> and <a href={{ url_for('main.country_rankings') }}> Country Rankings</a>,
         pages, the team behind <b>Dirtiest Power Plants</b> needed to create a new modelling approach.
         Tycho is a power-sector (scope 2) emissions measurement data collection and supervised machine learning pipeline capable of attributing emissions
-        to individual power plants on a given day using a prediction process. 
+        to individual power plants on any given day using a prediction process. 
         </p>
     </div>
     
@@ -88,7 +88,7 @@
         <p>
         Data from the European Space Agency's Sentinel-5P Satellite is downloaded and aggregated to form daily cumulative images of emissions.
         While this data is rich, it is noisy and non-associated with specific power plants or other emission sources. In order to associate specific emissions
-        with power plants. While the data from Sentinel-5 has been made publicly available since mid-2019, it remains difficult to process and aggregate this data. 
+        with power plants. The data from Sentinel-5 has been made publicly available since mid-2019, it remains difficult to process and aggregate this data. 
         Additionally, the rasterized measurements from Sentinel can be difficult to attribute to specific power plants, or even sources of emissions 
         (i.e. Coal plant near a city with heavy combustion engine vehicle traffic). 
         Tycho aims to remedy this problem, by providing a clean and robust training set linking specific observations (rows) from measured power plant data with representations of Sentinel-5 observations.
